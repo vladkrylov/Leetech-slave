@@ -187,6 +187,7 @@ void CAN1_RX0_IRQHandler(void)
 //		SetDirection(motorID, 1);
 //		PWM_Run(5000000);
 		finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
+//		Move1Unit(motorID, 0);
 
 		SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
 //		PrintCoordinate(coordinate);

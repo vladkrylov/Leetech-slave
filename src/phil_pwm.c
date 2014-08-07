@@ -417,7 +417,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			
-			if (MotorStop(coordinates[i], coordToSet, 1512)) break;
+			if (MotorStop(coordinates[i], coordToSet, 1024)) break;
 
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -430,7 +430,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
 	
-//	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
+	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
 		
 	return coord*2000/4096;
 }
@@ -457,14 +457,14 @@ void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSe
 	Npulses = 10000;
 	coords[0] = coord;
 
-	while(abs(coordToSet, coord) > 0) {
+	while(abs(coordToSet, coord) > 20) {
 		if (direction != lastDirection) {
 			lastDirection = direction;
 			SetDirection(motorID, direction);
 		}
 		
 		PWM_Run(Npulses);
-		Delay(1000000);
+		Delay(100000);
 		
 		lastCoord = coord;
 		coord = *steps2mm * 4096 + GetMotorCoordinate(motorID);

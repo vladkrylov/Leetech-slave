@@ -3,7 +3,7 @@
 
 #include "stm32f4xx.h"
 
-#define PWM_PERIOD 260
+#define PWM_PERIOD 258
 #define PWM_PULSE 120
 
 extern uint32_t pulsesToSend;
