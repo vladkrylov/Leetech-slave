@@ -430,7 +430,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
 	
-	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
+//	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
 		
 	return coord*2000/4096;
 }
