@@ -373,13 +373,13 @@ void ClearGlobalMoveArrays(void)
 	}
 }
 
-uint8_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
+direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 {
-	uint8_t direction;
+	direction_t direction;
 	if (coordToSet > coordinate) {
-		direction = 1;
+		direction = FORWARD;
 	} else {
-		direction = 0;
+		direction = BACK;
 	}
 	return direction;
 }
@@ -389,7 +389,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	uint16_t coordinates[sizeOfGlobalArrays] = {0};
 	uint16_t times[sizeOfGlobalArrays] = {0};
 	uint16_t coord;
-	uint8_t direction;
+	direction_t direction;
 
 	uint32_t i = 1;
 	ClearGlobalMoveArrays();
@@ -449,8 +449,8 @@ void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSe
 //	double Ki = 0.;
 //	double Kd = 0.;
 
-	uint8_t direction = DetermDirection(coordToSet, coord);
-	uint8_t lastDirection = direction;
+	direction_t direction = DetermDirection(coordToSet, coord);
+	direction_t lastDirection = direction;
 	SetDirection(motorID, direction);
 	
 //	Npulses = RExp(abs(coordToSet, coord));
@@ -508,8 +508,8 @@ void PreseciousMoveTest(uint8_t motorID, uint16_t* coordToReturn, uint16_t coord
 	double Ki = 0.;
 	double Kd = 0.;
 
-	uint8_t direction = DetermDirection(coordToSet, coord);
-	uint8_t lastDirection = direction;
+	direction_t direction = DetermDirection(coordToSet, coord);
+	direction_t lastDirection = direction;
 	SetDirection(motorID, direction);
 	
 	Npulses = 18000;
@@ -543,11 +543,11 @@ uint32_t RExp(uint32_t x)
 		return mul*x/div;
 }
 
-void Check4OverStep2mm(uint8_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
+void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
 {
 	uint16_t nextCoord = *nextCoordptr;
 	
-	if (direction) {
+	if (direction == FORWARD) {
 		if (lastCoord > nextCoord + 2000) {
 			*steps2mm += 1;
 			nextCoord += 4096;
@@ -597,4 +597,13 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 		return 1;
 	}
 	return 0;
+}
+
+uint16_t Reset(uint8_t motorID)
+{
+	uint16_t origin;
+	
+	SetDirection(motorID, 0);
+	
+	return origin;
 }

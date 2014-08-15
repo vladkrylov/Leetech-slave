@@ -2,9 +2,10 @@
 #define __PHIL_RELE_H
 
 #include <stm32f4xx.h>
+#include "phil_typedefs.h"
 
 void MotorSwitchInit(void);
-void SetDirection(uint8_t motorID, uint8_t direction);
+void SetDirection(uint8_t motorID, direction_t direction);
 
 #define RELE_PORT_1 			GPIOA
 #define RELE_PORT_2 			GPIOE

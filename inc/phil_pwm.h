@@ -2,6 +2,7 @@
 #define __PHIL_PWM_H
 
 #include "stm32f4xx.h"
+#include "phil_typedefs.h"
 
 #define PWM_PERIOD 258
 #define PWM_PULSE 120
@@ -25,13 +26,14 @@ void Init_RxMes(CanRxMsg *RxMessage);
 
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length);
 
-void Move1Unit(uint8_t motorID, uint8_t direction);
+void Move1Unit(uint8_t motorID, direction_t direction);
 void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm);
 void PreseciousMoveTest(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm);
 uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm);
+uint16_t Reset(uint8_t motorID);
 
 uint32_t RExp(uint32_t x);
-void Check4OverStep2mm(uint8_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
+void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
 uint8_t MotorStuck(uint16_t* coordArray, 
 									 uint16_t lastReceivedCoordinateIndex, 
 									 uint8_t coordArraySize, 
