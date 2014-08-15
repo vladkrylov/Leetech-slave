@@ -40,6 +40,17 @@ void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
 	CAN_Transmit(CANx, &TxMessage);
 }
 
+void SendResetData(uint8_t* data)
+{
+	uint8_t message_length = 8;
+	uint8_t i;
+	
+	for (i=0; i<message_length; i++) {
+		TxMessage.Data[i] = data[i];
+	}
+	CAN_Transmit(CANx, &TxMessage);
+}
+
 void CAN_Config(void)
 {
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -357,7 +368,7 @@ uint32_t GetCoordinateToSet(void)
 	return coordinateToSet;
 }
 
-void Move1Unit(uint8_t motorID, uint8_t direction)
+void Move1Unit(uint8_t motorID, direction_t direction)
 {
 	SetDirection(motorID, direction);
 	Delay(500000);
@@ -601,9 +612,23 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 
 uint16_t Reset(uint8_t motorID)
 {
-	uint16_t origin;
+	uint16_t origin = UINT16_MAX;
+	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+	uint32_t i = 1;
 	
-	SetDirection(motorID, 0);
+	SetDirection(motorID, BACK);
+	coordinates[0] = GetMotorCoordinate(motorID);
 	
-	return origin;
+	PWM_start();
+	while(1) {
+		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
+			PWM_stop();
+			
+			Delay(100000);
+			origin = GetMotorCoordinate(motorID);
+			return origin;
+		}
+		coordinates[i] = GetMotorCoordinate(motorID);
+		i++; i %= sizeOfGlobalArrays;
+	}
 }

@@ -33,6 +33,7 @@
 #include "phil_pwm.h"
 #include "phil_i2c.h"
 #include "phil_rele.h"
+#include "phil_typedefs.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Examples
   * @{
@@ -167,8 +168,11 @@ void SysTick_Handler(void)
   * @retval None
   */
 void CAN1_RX0_IRQHandler(void)
-{	
-	uint32_t i, j;
+{
+	uint8_t i;
+	uint16_t origins[4];
+	commands_t action;
+	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
   if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
@@ -177,16 +181,33 @@ void CAN1_RX0_IRQHandler(void)
 		uint16_t coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
 		uint16_t finalCoord;
 		uint8_t motorID = RxMessage.Data[2];
-		uint8_t dir = RxMessage.Data[3];
+		uint8_t actionIndicator = RxMessage.Data[3];
 		uint8_t steps2mm = RxMessage.Data[4];
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
-		
-  	i = 0;
 
-//		SetDirection(motorID, 1);
-//		PWM_Run(5000000);
-		finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
+		action = WhatToDo(actionIndicator);
+		
+		switch (action) {
+			case MOVE:
+				finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
+				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				break;
+			
+			case RESET_ONE:
+				finalCoord = Reset(motorID);
+				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				break;
+			
+			case RESET_ALL:
+				for(i=0; i<4; i++) {
+					origins[i] = Reset(i+1);
+				}
+				SendResetData((uint8_t *)origins);
+				break;
+		}
+//		finalCoord = Reset(motorID);
+//		finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
 //		Move1Unit(motorID, 0);
 
 		SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);

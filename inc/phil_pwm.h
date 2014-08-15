@@ -25,6 +25,7 @@ uint32_t GetCoordinateToSet(void);
 void Init_RxMes(CanRxMsg *RxMessage);
 
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length);
+void SendResetData(uint8_t* data);
 
 void Move1Unit(uint8_t motorID, direction_t direction);
 void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm);
