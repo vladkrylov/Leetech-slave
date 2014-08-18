@@ -572,23 +572,23 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 uint16_t Reset(uint8_t motorID)
 {
 	uint16_t origin = UINT16_MAX;
-//	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-//	uint32_t i = 1;
-//	
-//	SetDirection(motorID, BACK);
-//	coordinates[0] = GetMotorCoordinate(motorID);
-//	
-//	PWM_start();
-//	while(1) {
-//		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
-//			PWM_stop();
-//			
-//			Delay(100000);
+	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+	uint32_t i = 1;
+	
+	SetDirection(motorID, BACK);
+	coordinates[0] = GetMotorCoordinate(motorID);
+	
+	PWM_start();
+	while(1) {
+		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
+			PWM_stop();
+			
+			Delay(100000);
 			origin = GetMotorCoordinate(motorID);
 			return origin;
-//		}
-//		coordinates[i] = GetMotorCoordinate(motorID);
-//		i++; i %= sizeOfGlobalArrays;
-//	}
+		}
+		coordinates[i] = GetMotorCoordinate(motorID);
+		i++; i %= sizeOfGlobalArrays;
+	}
 }
 

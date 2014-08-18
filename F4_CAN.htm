@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\F4_CAN.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\F4_CAN.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Aug 18 18:53:39 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Mon Aug 18 19:47:08 2014
 <BR><P>
 <H3>Maximum Stack Usage =       1216 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -234,8 +234,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 100 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; I2C3_Init &rArr; I2C_Init &rArr; RCC_GetClocksFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
-<LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
 </UL>
 
 <P><STRONG><a name="[fb]"></a>__rt_entry_postli_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$0000000C))
@@ -685,9 +685,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[af]"></a>RCC_APB2PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SYSCFG_DeInit
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_DeInit
+<BR><BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_DeInit
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
+<LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SYSCFG_DeInit
 </UL>
 
 <P><STRONG><a name="[122]"></a>RCC_AHB1PeriphClockLPModeCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
@@ -841,6 +841,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMoveTest
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMove
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move1Unit
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -913,6 +914,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -924,6 +926,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStop
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -968,14 +971,14 @@ Global Symbols
 <P><STRONG><a name="[a3]"></a>PreseciousMove</STRONG> (Thumb, 294 bytes, Stack size 664 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 736<LI>Call Chain = PreseciousMove &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DetermDirection
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
@@ -994,14 +997,14 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 </UL>
-<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
+<BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[83]"></a>Move</STRONG> (Thumb, 316 bytes, Stack size 440 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1176<LI>Call Chain = Move &rArr; PreseciousMove &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
@@ -1012,27 +1015,34 @@ Global Symbols
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
 <LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[a9]"></a>PreseciousMoveTest</STRONG> (Thumb, 260 bytes, Stack size 472 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<BR><BR>[Calls]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 <LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DetermDirection
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 
 <P><STRONG><a name="[143]"></a>RExp</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, phil_pwm.o(.text), UNUSED)
 
-<P><STRONG><a name="[85]"></a>Reset</STRONG> (Thumb, 20 bytes, Stack size 16 bytes, phil_pwm.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = Reset &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
+<P><STRONG><a name="[85]"></a>Reset</STRONG> (Thumb, 140 bytes, Stack size 216 bytes, phil_pwm.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = Reset &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
@@ -1060,6 +1070,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMoveTest
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMove
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move1Unit
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
@@ -1588,12 +1599,12 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40xx.o(RESET)
 </UL>
 <P><STRONG><a name="[d5]"></a>EXTILine0_Config</STRONG> (Thumb, 108 bytes, Stack size 24 bytes, phil_nvic.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SYSCFG_EXTILineConfig
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_Init
+<BR><BR>[Calls]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_Init
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
 <LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[d7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SYSCFG_EXTILineConfig
 </UL>
 
 <P><STRONG><a name="[1ba]"></a>EXTI_DeInit</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32f4xx_exti.o(.text), UNUSED)
@@ -1643,6 +1654,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMoveTest
 <LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PreseciousMove
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
@@ -1662,8 +1674,8 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8 + Unknown Stack Size
 <LI>Call Chain = __user_setup_stackheap
 </UL>
-<BR>[Calls]<UL><LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_perproc_libspace
-<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_initial_stackheap
+<BR>[Calls]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_initial_stackheap
+<LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__user_perproc_libspace
 </UL>
 <BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_sh
 </UL>
