@@ -7,7 +7,7 @@ commands_t WhatToDo(uint8_t symbol)
 		return MOVE;
 	case 'r':
 		return RESET_ONE;
-	case 'a':
+	case 'R':
 		return RESET_ALL;
 	case 'g':
 		return GET_COORDINATE;

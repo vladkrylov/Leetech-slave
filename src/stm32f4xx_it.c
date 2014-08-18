@@ -170,7 +170,6 @@ void SysTick_Handler(void)
 void CAN1_RX0_IRQHandler(void)
 {
 	uint8_t i;
-	uint16_t origins[4];
 	commands_t action;
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
@@ -200,6 +199,7 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case RESET_ALL:
+				origins[0] = 0;
 				for(i=0; i<4; i++) {
 					origins[i] = Reset(i+1);
 				}
@@ -210,7 +210,7 @@ void CAN1_RX0_IRQHandler(void)
 //		finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
 //		Move1Unit(motorID, 0);
 
-		SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+//		SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
 //		PrintCoordinate(coordinate);
 	}
 //	CAN_ClearFlag(CAN1, 

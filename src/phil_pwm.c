@@ -44,8 +44,10 @@ void SendResetData(uint8_t* data)
 {
 	uint8_t message_length = 8;
 	uint8_t i;
+	uint8_t arrayForDebug[8];
 	
 	for (i=0; i<message_length; i++) {
+		arrayForDebug[i] = data[i];
 		TxMessage.Data[i] = data[i];
 	}
 	CAN_Transmit(CANx, &TxMessage);
@@ -290,15 +292,6 @@ void TIM_Config(void)
 	
 	TIM3->CNT = PWM_PULSE + 2;
 	TIM4->CNT = PWM_PULSE + 2;
-
-	// Enable slave timers
-//	TIM_Cmd(TIM3, ENABLE);
-//	TIM_Cmd(TIM4, ENABLE);
-	
-	// Enable master timer
-//	TIM_Cmd(TIM2, ENABLE);
-//	TIM_ITConfig(TIM5, TIM_IT_Update, ENABLE);
-//	NVIC_EnableIRQ(TIM5_IRQn);
 }
 
 void PWM_start(void)
@@ -334,30 +327,6 @@ void PWM_Run(uint32_t duration)
 	PWM_stop();
 }
 
-void PWM_Run_test(uint32_t coordinate)
-{
-//	uint16_t coordinates[100];
-//	uint16_t times[100];
-//	uint32_t i = 0;
-//	uint16_t test = 0;
-//	
-////	SetDirection(3, 1);
-////	Delay(500000);
-//	
-//	TIM5->CR1 |= TIM_CR1_CEN;
-//	PWM_start();
-//	while(1) {
-//		coordinates[i] = GetMotorCoordinate();
-//		times[i] = TIM5->CNT;
-//		if (coordinates[i] > coordinate) {
-//			PWM_stop();
-//			break;
-//		}
-//		i++;
-//	}
-//	TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
-}
-
 void SetDestinationCoordinate(uint16_t x)
 {
 	coordinateToSet = x;
@@ -373,15 +342,6 @@ void Move1Unit(uint8_t motorID, direction_t direction)
 	SetDirection(motorID, direction);
 	Delay(500000);
 	PWM_Run(500000);
-}
-
-void ClearGlobalMoveArrays(void)
-{
-	uint16_t i;
-	for(i=0; i<sizeOfGlobalArrays; i++) {
-//		times[i] = 0;
-//		coordinates[i] = 0;
-	}
 }
 
 direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
@@ -403,7 +363,6 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	direction_t direction;
 
 	uint32_t i = 1;
-	ClearGlobalMoveArrays();
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
@@ -613,22 +572,23 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 uint16_t Reset(uint8_t motorID)
 {
 	uint16_t origin = UINT16_MAX;
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint32_t i = 1;
-	
-	SetDirection(motorID, BACK);
-	coordinates[0] = GetMotorCoordinate(motorID);
-	
-	PWM_start();
-	while(1) {
-		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
-			PWM_stop();
-			
-			Delay(100000);
+//	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+//	uint32_t i = 1;
+//	
+//	SetDirection(motorID, BACK);
+//	coordinates[0] = GetMotorCoordinate(motorID);
+//	
+//	PWM_start();
+//	while(1) {
+//		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
+//			PWM_stop();
+//			
+//			Delay(100000);
 			origin = GetMotorCoordinate(motorID);
 			return origin;
-		}
-		coordinates[i] = GetMotorCoordinate(motorID);
-		i++; i %= sizeOfGlobalArrays;
-	}
+//		}
+//		coordinates[i] = GetMotorCoordinate(motorID);
+//		i++; i %= sizeOfGlobalArrays;
+//	}
 }
+
