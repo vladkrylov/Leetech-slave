@@ -4,6 +4,7 @@
 #include "phil_rele.h"
 
 uint8_t encoderOutput[NUMBER_OF_BITS_FROM_ENCODER];
+uint16_t origins[4] = {0};
 
 /**
   * @brief  Main program.

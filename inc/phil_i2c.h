@@ -8,6 +8,7 @@
 #include <stm32f4xx.h>
 
 extern uint8_t encoderOutput[NUMBER_OF_BITS_FROM_ENCODER];
+extern uint16_t origins[4];
 
 void USART3_Init(void);
 void Usart3_Send_symbol(uint8_t);

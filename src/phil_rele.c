@@ -31,32 +31,32 @@ void MotorSwitchInit(void)
 	GPIO_Init(GPIOE, &rele_2_5);
 }
 
-void SetDirection(uint8_t motorID, uint8_t direction)
+void SetDirection(uint8_t motorID, direction_t direction)
 {
 	switch(motorID) {
 		case 1:
-			if (direction) {
+			if (direction == FORWARD) {
 				MOTOR_1_B
 			} else {
 				MOTOR_1_F
 			}
 			break;
 		case 2:
-			if (direction) {
+			if (direction == FORWARD) {
 				MOTOR_2_B
 			} else {
 				MOTOR_2_F
 			}
 			break;
 		case 3:
-			if (direction) {
+			if (direction == FORWARD) {
 				MOTOR_3_B
 			} else {
 				MOTOR_3_F
 			}
 			break;
 		case 4:
-			if (direction) {
+			if (direction == FORWARD) {
 				MOTOR_4_B
 			} else {
 				MOTOR_4_F
