@@ -30,9 +30,6 @@ int main(void)
 	
 	MOTOR_1_B
 	GPIOE->ODR ^= GPIO_Pin_12;
-	PWM_start();
-	Delay(100);
-	PWM_stop();
 	
 //	Usart3_Send_String("Hello world!");
   while(1)

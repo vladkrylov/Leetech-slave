@@ -176,19 +176,23 @@ void CAN1_RX0_IRQHandler(void)
   
   if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
 
-		
-		uint16_t coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
+		uint16_t coordinateToSet;
 		uint16_t finalCoord;
 		uint8_t motorID = RxMessage.Data[2];
 		uint8_t actionIndicator = RxMessage.Data[3];
 		uint8_t steps2mm = RxMessage.Data[4];
+		uint16_t newPulseWidth;
+		uint16_t newPulsePeriod;
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
 
-		action = WhatToDo(actionIndicator);
+//		action = WhatToDo(actionIndicator);
+		action = actionIndicator;
 		
 		switch (action) {
 			case MOVE:
+				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
+			
 				finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
 				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
@@ -199,7 +203,6 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case RESET_ALL:
-				origins[0] = 0;
 				for(i=0; i<4; i++) {
 					origins[i] = Reset(i+1);
 				}
@@ -211,7 +214,14 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case TEST_OSCILLOSCOPE:
-				TestPulsesForOscilloscope(motorID);
+				TestPulsesForOscilloscope();
+				break;
+			
+			case SET_PULSES:
+				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);;
+				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);;
+			
+				UpdateTimers(newPulseWidth, newPulsePeriod);
 				break;
 		}
 //		finalCoord = Reset(motorID);

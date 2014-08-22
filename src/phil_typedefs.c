@@ -15,6 +15,8 @@ commands_t WhatToDo(uint8_t symbol)
 		return TEST;
 	case 'z':
 		return TEST_OSCILLOSCOPE;
+	case 's':
+		return SET_PULSES;
 	default:
 		return NOTHING;
 	}

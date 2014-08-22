@@ -4,9 +4,6 @@
 #include "stm32f4xx.h"
 #include "phil_typedefs.h"
 
-#define PWM_PERIOD 236
-#define PWM_PULSE 118
-
 extern uint32_t pulsesToSend;
 
 void Delay(uint32_t delay);
@@ -15,6 +12,7 @@ void NVIC_Config(void);
 void CAN_Config(void);
 
 void TIM_Config(void);
+void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod);
 void PWM_start(void);
 void PWM_stop(void);
 void PWM_Run(uint32_t duration);
@@ -35,7 +33,7 @@ uint16_t Reset(uint8_t motorID);
 
 // Tests
 void Test(uint8_t motorID);
-void TestPulsesForOscilloscope(uint8_t motorID);
+void TestPulsesForOscilloscope();
 
 uint32_t RExp(uint32_t x);
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);

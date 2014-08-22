@@ -4,9 +4,10 @@
 #include "phil_i2c.h"
 
 uint16_t coordinateToSet = 0;
-
 const uint16_t sizeOfGlobalArrays = 100;
 
+uint16_t PWM_PERIOD = 260;
+uint16_t PWM_PULSE = 118;
 
 CAN_InitTypeDef        CAN_InitStructure;
 CAN_FilterInitTypeDef  CAN_FilterInitStructure;
@@ -175,11 +176,30 @@ void Init_RxMes(CanRxMsg *RxMessage)
   }
 }
 
+void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod)
+{
+	PWM_PULSE = pulseWidth;
+  PWM_PERIOD = puslePeriod;
+
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+	TIM3->ARR = PWM_PERIOD;
+	TIM4->ARR = PWM_PERIOD;
+
+	TIM3->CNT = PWM_PULSE + 2;
+	TIM4->CNT = PWM_PULSE + 2;
+}
+
 void TIM_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	TIM_OCInitTypeDef  TIM_OCInitStructure;
+	
+	TIM_Cmd(TIM2, DISABLE);
+	TIM_Cmd(TIM3, DISABLE);
+	TIM_Cmd(TIM4, DISABLE);
+	TIM_Cmd(TIM5, DISABLE);
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5 , ENABLE);
 	
@@ -275,10 +295,10 @@ void TIM_Config(void)
 	TIM_OC4Init(TIM4, &TIM_OCInitStructure);
 
   TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
-	TIM_ARRPreloadConfig(TIM3, ENABLE);
+	TIM_ARRPreloadConfig(TIM3, DISABLE);
 
   TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
-	TIM_ARRPreloadConfig(TIM4, ENABLE);
+	TIM_ARRPreloadConfig(TIM4, DISABLE);
 	
 	// Synchronization --------------------------------------------
 	TIM_SelectMasterSlaveMode(TIM2, TIM_MasterSlaveMode_Enable);
@@ -296,8 +316,8 @@ void TIM_Config(void)
 
 void PWM_start(void)
 {
-	TIM3->CNT = 0;
-	TIM4->CNT = TIM3->CNT + PWM_PERIOD/2 + 1;	
+	TIM3->CNT = PWM_PULSE;
+	TIM4->CNT = TIM3->CNT + (PWM_PERIOD)/2 + 1;	
 	
 	// Enable slave timers
 	TIM_Cmd(TIM3, ENABLE);
@@ -309,13 +329,13 @@ void PWM_start(void)
 
 void PWM_stop(void)
 {
-	TIM3->CNT = PWM_PULSE + 2;
-	TIM4->CNT = PWM_PULSE + 2;	
-	
 	TIM_Cmd(TIM3, DISABLE);
 	TIM_Cmd(TIM4, DISABLE);
 	
 	TIM_Cmd(TIM2, DISABLE);
+	
+	TIM3->CNT = PWM_PULSE + 2;
+	TIM4->CNT = PWM_PULSE + 2;	
 }
 
 void PWM_Run(uint32_t duration)
@@ -597,17 +617,17 @@ void Test(uint8_t motorID)
 //		SetDirection(motorID, FORWARD);
 //		PWM_Run(10000000);
 	
-	int i = 0;
-	for(i=0; i<1; i++) {
+//	int i = 0;
+//	for(i=0; i<3; i++) {
 		SetDirection(motorID, FORWARD);
-		PWM_Run(5000000);
+		PWM_Run(50000000);
 		
 		SetDirection(motorID, BACK);
 		PWM_Run(5000000);
-	}
+//	}
 }
 
-void TestPulsesForOscilloscope(uint8_t motorID)
+void TestPulsesForOscilloscope()
 {
 		PWM_Run(100000000);
 }

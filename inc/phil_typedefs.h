@@ -4,7 +4,7 @@
 #include "stm32f4xx.h"
 
 typedef enum {BACK, FORWARD} direction_t;
-typedef enum {NOTHING, MOVE, RESET_ONE, RESET_ALL, GET_COORDINATE, TEST, TEST_OSCILLOSCOPE} commands_t;
+typedef enum {NOTHING, MOVE, RESET_ONE, RESET_ALL, GET_COORDINATE, TEST, TEST_OSCILLOSCOPE, SET_PULSES} commands_t;
 
 commands_t WhatToDo(uint8_t symbol);
 
