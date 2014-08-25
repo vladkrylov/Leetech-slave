@@ -197,7 +197,7 @@ void GetEncoderOutput(uint8_t motorID)
 	uint8_t i;
 	uint8_t address;
 	I2C_TypeDef* I2Cphil;
-	if ((motorID == 2) || (motorID == 3)) {
+	if ((motorID == 1) || (motorID == 2)) {
 		I2Cphil = I2C3;
 	} else {
 		I2Cphil = I2C2;
