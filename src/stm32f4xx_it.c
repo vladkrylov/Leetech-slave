@@ -171,23 +171,22 @@ void CAN1_RX0_IRQHandler(void)
 {
 	uint8_t i;
 	commands_t action;
+	uint16_t coordinateToSet;
+	uint16_t finalCoord;
+	uint8_t motorID;
+	uint8_t steps2mm;
+	uint16_t newPulseWidth;
+	uint16_t newPulsePeriod;
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
   if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
-
-		uint16_t coordinateToSet;
-		uint16_t finalCoord;
-		uint8_t motorID = RxMessage.Data[2];
-		uint8_t actionIndicator = RxMessage.Data[3];
-		uint8_t steps2mm = RxMessage.Data[4];
-		uint16_t newPulseWidth;
-		uint16_t newPulsePeriod;
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
-
-//		action = WhatToDo(actionIndicator);
-		action = actionIndicator;
+		action = RxMessage.Data[3];
+		
+		motorID = RxMessage.Data[2];
+		steps2mm = RxMessage.Data[4];
 		
 		switch (action) {
 			case MOVE:
