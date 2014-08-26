@@ -2,7 +2,16 @@
 #include "phil_pwm.h"
 #include "phil_rele.h"
 #include "phil_i2c.h"
+#include "phil_typedefs.h"
 
+uint32_t PulsesToSend[4][2] = {
+		{15000, 50000},
+		{50000, 500000},
+		{0, 0},
+		{0, 0}};
+
+uint32_t DelayAfterPulses[4][2] = {0};
+			
 uint16_t coordinateToSet = 0;
 const uint16_t sizeOfGlobalArrays = 100;
 
@@ -13,6 +22,22 @@ CAN_InitTypeDef        CAN_InitStructure;
 CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 CanTxMsg TxMessage;
 
+void PulseStepsConfigure(uint32_t newDelay)
+{
+	uint8_t motor_i;
+	direction_t dir_i;
+	
+	for (motor_i=0; motor_i<4; motor_i++) {
+	for (dir_i=BACK; dir_i<=FORWARD; dir_i++) {
+		if (newDelay > PulsesToSend[motor_i][dir_i]) {
+			DelayAfterPulses[motor_i][dir_i] = newDelay - PulsesToSend[motor_i][dir_i];
+		} else {
+			DelayAfterPulses[motor_i][dir_i] = 1000;
+		}
+	}
+	}
+}
+
 /* Delay -----------------------------------------------*/	
 void Delay(uint32_t delay)
 {
@@ -20,6 +45,14 @@ void Delay(uint32_t delay)
 	for(i=0; i<delay; i++);
 }
 
+void SendCoordinate(uint16_t coordindate, uint8_t steps2mm)
+{
+	TxMessage.Data[0] = coordindate >> 8;
+	TxMessage.Data[1] = coordindate & LSBYTE;
+	TxMessage.Data[2] = steps2mm;
+	
+	CAN_Transmit(CANx, &TxMessage);
+}
 
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
 {
@@ -41,14 +74,14 @@ void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
 	CAN_Transmit(CANx, &TxMessage);
 }
 
-void SendResetData(uint8_t* data)
+void SendArray8Bytes(uint8_t* data)
 {
 	uint8_t message_length = 8;
 	uint8_t i;
-	uint8_t arrayForDebug[8];
+//	uint8_t arrayForDebug[8];
 	
 	for (i=0; i<message_length; i++) {
-		arrayForDebug[i] = data[i];
+//		arrayForDebug[i] = data[i];
 		TxMessage.Data[i] = data[i];
 	}
 	CAN_Transmit(CANx, &TxMessage);
@@ -203,18 +236,18 @@ void TIM_Config(void)
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5 , ENABLE);
 	
-//	TIM_TimeBaseStructure.TIM_Period = 300;
-//  TIM_TimeBaseStructure.TIM_Prescaler = 0;
-//  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-//  TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
-//	
-//	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-//  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-//  TIM_OCInitStructure.TIM_Pulse = 1;
-//  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	TIM_TimeBaseStructure.TIM_Period = 100;
+  TIM_TimeBaseStructure.TIM_Prescaler = 0;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+	
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = 1;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
-//  TIM_OC1Init(TIM5, &TIM_OCInitStructure);
+  TIM_OC1Init(TIM5, &TIM_OCInitStructure);
 	
 	// Master - TIM2 ----------------------------------------
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
@@ -395,9 +428,13 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		
 
 		TIM5->CR1 |= TIM_CR1_CEN;
-		PWM_start();
+//		PWM_start();
+		PulseStepsConfigure(100000);
 		while(1) {
-			if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 80)) {
+			PWM_Run(PulsesToSend[motorID-1][direction]);
+			Delay(DelayAfterPulses[motorID-1][direction]);
+			
+			if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 5)) {
 				PWM_stop();
 				break;
 			}
@@ -407,7 +444,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			
-			if (MotorStop(coordinates[i], coordToSet, 1024)) break;
+			if (MotorStop(coordinates[i], coordToSet, 512)) break;
 
 			i++; i %= sizeOfGlobalArrays;
 		}
