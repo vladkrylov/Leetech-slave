@@ -4,38 +4,80 @@
 #include "phil_i2c.h"
 #include "phil_typedefs.h"
 
-uint32_t PulsesToSend[4][2] = {
-		{15000, 50000},
-		{50000, 500000},
-		{0, 0},
-		{0, 0}};
+uint16_t PWM_PERIOD = 260;
+uint16_t PWM_PULSE = 118;
 
-uint32_t DelayAfterPulses[4][2] = {0};
-			
 uint16_t coordinateToSet = 0;
 const uint16_t sizeOfGlobalArrays = 100;
 
-uint16_t PWM_PERIOD = 260;
-uint16_t PWM_PULSE = 118;
+	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+	uint16_t times[sizeOfGlobalArrays] = {0};
+	uint32_t pulses[sizeOfGlobalArrays] = {0};
+
+uint32_t PulsesToSend[4][2] = {
+		{50000, 50000},
+		{50000, 50000},
+		{0, 0},
+		{0, 0}};
+uint32_t StepDuration = 100000;
+uint32_t DelayAfterPulses[4][2] = {0};
+			
+uint16_t coarseBalanceMin = 150;
+uint16_t coarseBalanceMax = 300;
+
+uint16_t fineBalanceMin = 4;
+uint16_t fineBalanceMax = 8;
 
 CAN_InitTypeDef        CAN_InitStructure;
 CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 CanTxMsg TxMessage;
 
-void PulseStepsConfigure(uint32_t newDelay)
+void PulseStepsDelayUpdate()
 {
 	uint8_t motor_i;
 	direction_t dir_i;
-	
+
 	for (motor_i=0; motor_i<4; motor_i++) {
 	for (dir_i=BACK; dir_i<=FORWARD; dir_i++) {
-		if (newDelay > PulsesToSend[motor_i][dir_i]) {
-			DelayAfterPulses[motor_i][dir_i] = newDelay - PulsesToSend[motor_i][dir_i];
+		if (StepDuration > PulsesToSend[motor_i][dir_i]) {
+			DelayAfterPulses[motor_i][dir_i] = StepDuration - PulsesToSend[motor_i][dir_i];
 		} else {
-			DelayAfterPulses[motor_i][dir_i] = 1000;
+			DelayAfterPulses[motor_i][dir_i] = 3000;
 		}
 	}
 	}
+}
+
+void PulseStepsDelayConfigure(uint32_t newDelay)
+{
+	StepDuration = newDelay;
+	PulseStepsDelayUpdate();
+}
+
+void PulseStepsRunConfigure(uint32_t newStep, uint8_t motorIndex, direction_t dir)
+{
+	PulsesToSend[motorIndex][dir] = newStep;
+	PulseStepsDelayUpdate();
+}
+
+uint32_t KeepCoarseBalance(uint16_t* coordsArray, uint16_t lastCoordinateIndex, uint16_t size, uint32_t pulseDuration)
+{
+	uint16_t prevIndex;
+	uint16_t diff;
+	uint32_t balancedPulseDuration = pulseDuration;
+	
+	if (lastCoordinateIndex < 2) return pulseDuration;
+	
+	prevIndex = (lastCoordinateIndex-1) % size;
+	diff = abs(coordsArray[lastCoordinateIndex], coordsArray[lastCoordinateIndex-1]);
+	if (diff < 20) return pulseDuration;
+	
+	if ( (diff < coarseBalanceMin) || (diff > coarseBalanceMax) ){
+//		balancedPulseDuration = pulseDuration * (coarseBalanceMin + coarseBalanceMax) / (2. * diff);
+		balancedPulseDuration = pulseDuration * coarseBalanceMin / diff;
+	}
+	
+	return balancedPulseDuration;
 }
 
 /* Delay -----------------------------------------------*/	
@@ -410,8 +452,7 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 
 uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 {
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
+	uint32_t balancedPulse;
 	uint16_t coord;
 	direction_t direction;
 
@@ -419,8 +460,9 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
+	pulses[0] = PulsesToSend[motorID-1][direction];
 
-	if (abs(coordinates[0], coordToSet) > 205) {
+	if (abs(coordinates[0], coordToSet) > coarseBalanceMax) {
 	
 		direction = DetermDirection(coordToSet, coordinates[0]);
 		
@@ -429,7 +471,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 
 		TIM5->CR1 |= TIM_CR1_CEN;
 //		PWM_start();
-		PulseStepsConfigure(100000);
+		PulseStepsDelayConfigure(StepDuration);
 		while(1) {
 			PWM_Run(PulsesToSend[motorID-1][direction]);
 			Delay(DelayAfterPulses[motorID-1][direction]);
@@ -439,13 +481,17 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 				break;
 			}
 			
+			pulses[i] = PulsesToSend[motorID-1][direction];
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			
-			if (MotorStop(coordinates[i], coordToSet, 512)) break;
+			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
 
+			balancedPulse = KeepCoarseBalance(coordinates, i, sizeOfGlobalArrays, pulses[i]);
+			PulseStepsRunConfigure(balancedPulse, motorID-1, direction);
+			
 			i++; i %= sizeOfGlobalArrays;
 		}
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
@@ -459,7 +505,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	
 //	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
 		
-	return coord*2000/4096;
+	return coord;
 }
 
 void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm)
@@ -523,53 +569,6 @@ void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSe
 	}
 }
 
-void PreseciousMoveTest(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm)
-{
-	uint16_t coord = *coordToReturn;
-	uint16_t lastCoord = coord;
-	uint32_t Npulses = 0;
-	uint16_t coords[sizeOfGlobalArrays] = {0};
-	uint16_t pulses[sizeOfGlobalArrays] = {0};
-	uint16_t i = 1;
-	double Kp = 2.;
-	double Ki = 0.;
-	double Kd = 0.;
-
-	direction_t direction = DetermDirection(coordToSet, coord);
-	direction_t lastDirection = direction;
-	SetDirection(motorID, direction);
-	
-	Npulses = 18000;
-	coords[0] = coord;
-	
-	while(abs(coordToSet, coord) > 10) {
-		
-		PWM_Run(Npulses);
-		Delay(10000000);
-		
-		lastCoord = coord;
-		coord = *steps2mm * 4096 + GetMotorCoordinate(motorID);
-		Check4OverStep2mm(direction, lastCoord, &coord, steps2mm);
-		coords[i-1] = coord - coords[i-1];
-		coords[i] = coord;
-		pulses[i-1] = Npulses;
-		
-		direction = DetermDirection(coordToSet, coord);
-		
-//		if (coord != lastCoord)
-//			Npulses = Npulses * abs(coordToSet, coord) / abs(coord, lastCoord) *1/2;
-		
-		i++; i %= sizeOfGlobalArrays;
-	}
-}
-
-uint32_t RExp(uint32_t x)
-{
-	uint8_t mul = 100;
-	uint8_t div = 1;
-		return mul*x/div;
-}
-
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
 {
 	uint16_t nextCoord = *nextCoordptr;
@@ -608,7 +607,7 @@ uint8_t MotorStuck(uint16_t* coordArray,
 			indPrev = ind - 1;
 		}
 		
-		if (abs(coordArray[ind], coordArray[indPrev]) > 1) {
+		if (abs(coordArray[ind], coordArray[indPrev]) > 4) {
 			res = 0;
 			break;
 		}

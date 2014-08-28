@@ -193,18 +193,19 @@ void CAN1_RX0_IRQHandler(void)
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
 			
 				finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
-				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, finalCoord / 4096);
+//				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
 			
 			case GET_COORDINATE:
 				finalCoord = GetMotorCoordinate(motorID);
-				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, steps2mm);
+//				SendEncoderOutput(encoderOutput, steps2mm, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
 			
 			case RESET_ONE:
 				finalCoord = Reset(motorID);
 				SendCoordinate(finalCoord, 0);
-//				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
 			
 			case RESET_ALL:

@@ -14,7 +14,12 @@ void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod);
 void PWM_start(void);
 void PWM_stop(void);
 void PWM_Run(uint32_t duration);
-void PulseStepsConfigure(uint32_t newDelay);
+
+void PulseStepsDelayUpdate();
+void PulseStepsDelayConfigure(uint32_t newDelay);
+void PulseStepsRunConfigure(uint32_t newStep, uint8_t motorIndex, direction_t dir);
+uint32_t KeepCoarseBalance(uint16_t* coordsArray, uint16_t lastCoordinateIndex, uint16_t size, uint32_t pulseDuration);
+
 void PWM_Run_test(uint32_t coordinate);
 
 void SetDestinationCoordinate(uint16_t);
