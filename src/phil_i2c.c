@@ -250,4 +250,18 @@ void PrintCoordinate(uint8_t* encoderOutpt)
 	}
 }
 
+uint16_t GetFullMotorCoordinate(uint16_t lastMeasuredCoordinate)
+{
+//	uint8_t steps2mm = lastMeasuredCoordinate % 4096;
+//	uint16_t newCoordinate = steps2mm*4096 + GetMotorCoordinate();
+//	
+//	if (abs(newCoordinate, lastMeasuredCoordinate) > 3000) {
+//		if (newCoordinate > lastMeasuredCoordinate) {
+//			newCoordinate -= 4096;
+//		} else {
+//			newCoordinate += 4096;
+//		}
+//	}
+//	return newCoordinate;
+}
 
