@@ -193,24 +193,26 @@ void CAN1_RX0_IRQHandler(void)
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
 			
 				finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
-				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, finalCoord / 4096);
+//				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
 			
 			case GET_COORDINATE:
 				finalCoord = GetMotorCoordinate(motorID);
-				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, steps2mm);
+//				SendEncoderOutput(encoderOutput, steps2mm, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
 			
 			case RESET_ONE:
 				finalCoord = Reset(motorID);
-				SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, 0);
 				break;
 			
 			case RESET_ALL:
 				for(i=0; i<4; i++) {
 					origins[i] = Reset(i+1);
 				}
-				SendResetData((uint8_t *)origins);
+				SendArray8Bytes((uint8_t *)origins);
 				break;
 				
 			case TEST:
@@ -228,18 +230,6 @@ void CAN1_RX0_IRQHandler(void)
 				UpdateTimers(newPulseWidth, newPulsePeriod);
 				break;
 		}
-//		finalCoord = Reset(motorID);
-//		finalCoord = Move(motorID, coordinateToSet*4096/2000, steps2mm);
-
-//		Move1Unit(motorID, 0);
-//		finalCoord = GetMotorCoordinate(motorID);
-		
-//		SetDirection(1, 0);
-//		Delay(10000000);
-//		PWM_start();
-
-//		SendEncoderOutput(encoderOutput, finalCoord / 2000, NUMBER_OF_BITS_FROM_ENCODER);
-//		PrintCoordinate(coordinate);
 	}
 //	CAN_ClearFlag(CAN1, 
 }
@@ -253,37 +243,11 @@ void CAN1_RX0_IRQHandler(void)
   */
 void CAN2_RX0_IRQHandler(void)
 {
-	int i, delay = 1000000;
-	uint8_t pulses = 0;
   CAN_Receive(CAN2, CAN_FIFO0, &RxMessage);
 
   if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD))
-//	if (RxMessage.StdId == 0x321)
   {
-//		if(RxMessage.Data[0] == 1) {
-//			GPIOD->ODR ^= GPIO_Pin_13;
-//			PWM_start();
-//		} else if(RxMessage.Data[0] == 2) {
-//			GPIOD->ODR ^= GPIO_Pin_14;
-//			PWM_stop();
-//		} else if(RxMessage.Data[0] == 3) {
-//			GPIOD->ODR ^= GPIO_Pin_15;
-//		} else if(RxMessage.Data[0] == 4) {
-//			GPIOD->ODR ^= GPIO_Pin_12;
-//		} else {
-//			GPIOD->ODR ^= GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-//			PWM_start();
-//			for(i=0;i<delay; i++);
-//			PWM_stop();
-//		}
-		GPIOD->ODR ^= GPIO_Pin_12;
-		SetPulsesToSend(RxMessage.Data[0]);
-		PWM_start();
-//		Move();
-		
-//		GetCoordinate(coordinate);
-//		PrintCoordinate(coordinate);
-		SendCoordinate(coordinate, NUMBER_OF_BITS_FROM_ENCODER);
+
   }
 }
 #endif  /* USE_CAN2 */

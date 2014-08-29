@@ -3,6 +3,9 @@
 
 #include "stm32f4xx.h"
 
+#define LSBYTE ((uint16_t)0x00FF)
+#define MSBYTE ((uint16_t)0xFF00)
+
 typedef enum {BACK, FORWARD} direction_t;
 typedef enum {NOTHING, MOVE, RESET_ONE, RESET_ALL, GET_COORDINATE, TEST, TEST_OSCILLOSCOPE, SET_PULSES} commands_t;
 
