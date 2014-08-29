@@ -311,7 +311,7 @@ void TIM_Config(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5 , ENABLE);
 	
 	TIM_TimeBaseStructure.TIM_Period = 0xFFFF;
-  TIM_TimeBaseStructure.TIM_Prescaler = 1000;
+  TIM_TimeBaseStructure.TIM_Prescaler = 39;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
@@ -468,20 +468,20 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		
 		SetDirection(motorID, direction);
 		
-
+		TIM5->CNT = 0;
 		TIM5->CR1 |= TIM_CR1_CEN;
-//		PWM_start();
-		PulseStepsDelayConfigure(StepDuration);
+		PWM_start();
+//		PulseStepsDelayConfigure(StepDuration);
 		while(1) {
-			PWM_Run(PulsesToSend[motorID-1][direction]);
-			Delay(DelayAfterPulses[motorID-1][direction]);
+//			PWM_Run(PulsesToSend[motorID-1][direction]);
+//			Delay(DelayAfterPulses[motorID-1][direction]);
 			
-			if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 5)) {
+			if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 20)) {
 				PWM_stop();
 				break;
 			}
 			
-			pulses[i] = PulsesToSend[motorID-1][direction];
+//			pulses[i] = PulsesToSend[motorID-1][direction];
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
@@ -489,8 +489,8 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			
 			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
 
-			balancedPulse = KeepCoarseBalance(coordinates, i, sizeOfGlobalArrays, pulses[i]);
-			PulseStepsRunConfigure(balancedPulse, motorID-1, direction);
+//			balancedPulse = KeepCoarseBalance(coordinates, i, sizeOfGlobalArrays, pulses[i]);
+//			PulseStepsRunConfigure(balancedPulse, motorID-1, direction);
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
