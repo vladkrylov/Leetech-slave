@@ -8,11 +8,10 @@ uint16_t PWM_PERIOD = 260;
 uint16_t PWM_PULSE = 118;
 
 uint16_t coordinateToSet = 0;
-const uint16_t sizeOfGlobalArrays = 100;
+const uint8_t sizeOfGlobalArrays = 200;
+//#define sizeOfGlobalArrays 100
 
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
-	uint32_t pulses[sizeOfGlobalArrays] = {0};
+
 
 uint32_t PulsesToSend[4][2] = {
 		{50000, 50000},
@@ -278,18 +277,18 @@ void TIM_Config(void)
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5 , ENABLE);
 	
-	TIM_TimeBaseStructure.TIM_Period = 100;
-  TIM_TimeBaseStructure.TIM_Prescaler = 0;
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-  TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
-	
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_Pulse = 1;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+//	TIM_TimeBaseStructure.TIM_Period = 100;
+//  TIM_TimeBaseStructure.TIM_Prescaler = 0;
+//  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+//  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+//  TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
+//	
+//	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+//  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+//  TIM_OCInitStructure.TIM_Pulse = 1;
+//  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
-  TIM_OC1Init(TIM5, &TIM_OCInitStructure);
+//  TIM_OC1Init(TIM5, &TIM_OCInitStructure);
 	
 	// Master - TIM2 ----------------------------------------
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2 , ENABLE);
@@ -311,7 +310,7 @@ void TIM_Config(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5 , ENABLE);
 	
 	TIM_TimeBaseStructure.TIM_Period = 0xFFFF;
-  TIM_TimeBaseStructure.TIM_Prescaler = 39;
+  TIM_TimeBaseStructure.TIM_Prescaler = 399;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   TIM_TimeBaseInit(TIM5, &TIM_TimeBaseStructure);
@@ -455,12 +454,17 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	uint32_t balancedPulse;
 	uint16_t coord;
 	direction_t direction;
+	
+	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+	uint16_t times[sizeOfGlobalArrays] = {0};
+//	uint32_t pulses[sizeOfGlobalArrays] = {0};
 
-	uint32_t i = 1;
+	uint8_t i = 1;
+	uint8_t stopInd = 0;
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
-	pulses[0] = PulsesToSend[motorID-1][direction];
+//	pulses[0] = PulsesToSend[motorID-1][direction];
 
 	if (abs(coordinates[0], coordToSet) > coarseBalanceMax) {
 	
@@ -471,27 +475,39 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		TIM5->CNT = 0;
 		TIM5->CR1 |= TIM_CR1_CEN;
 		PWM_start();
-//		PulseStepsDelayConfigure(StepDuration);
-		while(1) {
-//			PWM_Run(PulsesToSend[motorID-1][direction]);
-//			Delay(DelayAfterPulses[motorID-1][direction]);
-			
-			if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 20)) {
+
+		while(1) {			
+			if (MotorStuck(coordinates, 
+										(sizeOfGlobalArrays + i-1) % sizeOfGlobalArrays, 
+										 sizeOfGlobalArrays, 
+										 20)) {
 				PWM_stop();
 				break;
 			}
 			
-//			pulses[i] = PulsesToSend[motorID-1][direction];
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			
 			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
-
-//			balancedPulse = KeepCoarseBalance(coordinates, i, sizeOfGlobalArrays, pulses[i]);
-//			PulseStepsRunConfigure(balancedPulse, motorID-1, direction);
 			
+			i++; i %= sizeOfGlobalArrays;
+		}
+
+		stopInd = i;
+		i++;
+		
+		while(1) {
+			if (MotorStuck(coordinates, 
+										(sizeOfGlobalArrays + i-1) % sizeOfGlobalArrays, 
+										 sizeOfGlobalArrays, 
+										 5)) {
+				break;
+			}
+			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
+			times[i] = TIM5->CNT;
+			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			i++; i %= sizeOfGlobalArrays;
 		}
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
@@ -510,63 +526,63 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 
 void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm)
 {
-	uint16_t coord = *coordToReturn;
-	uint16_t lastCoord = coord;
-	uint32_t Npulses = 0;
-	uint16_t coords[sizeOfGlobalArrays] = {0};
-	uint16_t difcoords[sizeOfGlobalArrays] = {0};
-	uint16_t pulses[sizeOfGlobalArrays] = {0};
-	uint16_t i = 1;
-	uint32_t stepRepeats;
-//	double Kp = 2.;
-//	double Ki = 0.;
-//	double Kd = 0.;
+//	uint16_t coord = *coordToReturn;
+//	uint16_t lastCoord = coord;
+//	uint32_t Npulses = 0;
+//	uint16_t coords[sizeOfGlobalArrays] = {0};
+//	uint16_t difcoords[sizeOfGlobalArrays] = {0};
+//	uint16_t pulses[sizeOfGlobalArrays] = {0};
+//	uint16_t i = 1;
+//	uint32_t stepRepeats;
+////	double Kp = 2.;
+////	double Ki = 0.;
+////	double Kd = 0.;
 
-	direction_t direction = DetermDirection(coordToSet, coord);
-	direction_t lastDirection = direction;
-	SetDirection(motorID, direction);
-	
-//	Npulses = RExp(abs(coordToSet, coord));
-	Npulses = 10000;
-	coords[0] = coord;
+//	direction_t direction = DetermDirection(coordToSet, coord);
+//	direction_t lastDirection = direction;
+//	SetDirection(motorID, direction);
+//	
+////	Npulses = RExp(abs(coordToSet, coord));
+//	Npulses = 10000;
+//	coords[0] = coord;
 
-	while(abs(coordToSet, coord) > 20) {
-		if (direction != lastDirection) {
-			lastDirection = direction;
-			SetDirection(motorID, direction);
-		}
-		
-		PWM_Run(Npulses);
-		Delay(100000);
-		
-		lastCoord = coord;
-		coord = *steps2mm * 4096 + GetMotorCoordinate(motorID);
-		Check4OverStep2mm(direction, lastCoord, &coord, steps2mm);
-		coords[i] = coord;
-		pulses[i-1] = Npulses;
-		difcoords[i-1] = coord - lastCoord;
-		
-		direction = DetermDirection(coordToSet, coord);
-		
-//		if (i > 2) {
-//			Npulses = Npulses + Kp*(abs(coords[i], coords[i-1]) - abs(coords[i-1], coords[i-2])) + 
-//													Ki*(abs(coords[i], coords[i-1])) + 
-//													Kd*(abs(coords[i], coords[i-1]) - 2*abs(coords[i-1], coords[i-2]) + abs(coords[i-2], coords[i-3]));
+//	while(abs(coordToSet, coord) > 20) {
+//		if (direction != lastDirection) {
+//			lastDirection = direction;
+//			SetDirection(motorID, direction);
 //		}
-		if (coord != lastCoord) {
-			stepRepeats = 1;
-			Npulses = Npulses * abs(coordToSet, coord) / abs(coord, lastCoord) * stepRepeats / 4;
-			if (!Npulses) {
-				Npulses = 10;
-			}
-		}
-		else {
-			Npulses = Npulses * 5 / 4;
-			stepRepeats++;
-		}
-		
-		i++; i %= sizeOfGlobalArrays;
-	}
+//		
+//		PWM_Run(Npulses);
+//		Delay(100000);
+//		
+//		lastCoord = coord;
+//		coord = *steps2mm * 4096 + GetMotorCoordinate(motorID);
+//		Check4OverStep2mm(direction, lastCoord, &coord, steps2mm);
+//		coords[i] = coord;
+//		pulses[i-1] = Npulses;
+//		difcoords[i-1] = coord - lastCoord;
+//		
+//		direction = DetermDirection(coordToSet, coord);
+//		
+////		if (i > 2) {
+////			Npulses = Npulses + Kp*(abs(coords[i], coords[i-1]) - abs(coords[i-1], coords[i-2])) + 
+////													Ki*(abs(coords[i], coords[i-1])) + 
+////													Kd*(abs(coords[i], coords[i-1]) - 2*abs(coords[i-1], coords[i-2]) + abs(coords[i-2], coords[i-3]));
+////		}
+//		if (coord != lastCoord) {
+//			stepRepeats = 1;
+//			Npulses = Npulses * abs(coordToSet, coord) / abs(coord, lastCoord) * stepRepeats / 4;
+//			if (!Npulses) {
+//				Npulses = 10;
+//			}
+//		}
+//		else {
+//			Npulses = Npulses * 5 / 4;
+//			stepRepeats++;
+//		}
+//		
+//		i++; i %= sizeOfGlobalArrays;
+//	}
 }
 
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
@@ -574,12 +590,12 @@ void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* next
 	uint16_t nextCoord = *nextCoordptr;
 	
 	if (direction == FORWARD) {
-		if (lastCoord > nextCoord + 2000) {
+		if (lastCoord > nextCoord + 2048) {
 			*steps2mm += 1;
 			nextCoord += 4096;
 		}
 	} else {
-		if ((lastCoord < nextCoord) && abs(lastCoord, nextCoord) > 2000) {
+		if ((lastCoord < nextCoord) && abs(lastCoord, nextCoord) > 2048) {
 			*steps2mm -= 1;
 			nextCoord -= 4096;
 		}
@@ -588,7 +604,7 @@ void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* next
 }
 
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint16_t lastReceivedCoordinateIndex,
+									 uint8_t lastReceivedCoordinateIndex,
 									 uint8_t coordArraySize, 
 									 uint8_t numOfRepeats)
 {

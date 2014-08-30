@@ -44,7 +44,7 @@ void TestPulsesForOscilloscope();
 uint32_t RExp(uint32_t x);
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint16_t lastReceivedCoordinateIndex, 
+									 uint8_t lastReceivedCoordinateIndex, 
 									 uint8_t coordArraySize, 
 									 uint8_t numOfRepeats);
 uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion);
