@@ -482,6 +482,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\stm32f4xx_syscfg.c</FilePath>
             </File>
+            <File>
+              <FileName>phil_pid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\phil_pid.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

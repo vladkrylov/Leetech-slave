@@ -150,23 +150,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>472</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>D:\TBONE\Arm\STM32F4-DISCOVERY\F4_CAN_i2c\src\phil_pwm.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>505</LineNumber>
+          <LineNumber>529</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -204,7 +188,12 @@
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>sizeOfGlobalArrays</ItemText>
+          <ItemText>sizeOfGlobalArrays,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>PWM_PULSE</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -217,6 +206,16 @@
           <count>1</count>
           <WinNumber>2</WinNumber>
           <ItemText>DelayAfterPulses</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0400))</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>((TIM_TypeDef *) (((uint32_t)0x40000000) + 0x0800))</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
@@ -362,7 +361,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>181</TopLine>
+      <TopLine>180</TopLine>
       <CurrentLine>191</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_it.c</PathWithFileName>
@@ -408,10 +407,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>11</ColumnNumber>
+      <ColumnNumber>30</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>494</TopLine>
-      <CurrentLine>505</CurrentLine>
+      <TopLine>501</TopLine>
+      <CurrentLine>519</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pwm.c</PathWithFileName>
       <FilenameWithoutPath>phil_pwm.c</FilenameWithoutPath>
@@ -490,8 +489,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>215</TopLine>
+      <CurrentLine>232</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_i2c.c</PathWithFileName>
       <FilenameWithoutPath>phil_i2c.c</FilenameWithoutPath>
@@ -543,6 +542,22 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_syscfg.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_syscfg.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>18</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>16</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>17</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\phil_pid.c</PathWithFileName>
+      <FilenameWithoutPath>phil_pid.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

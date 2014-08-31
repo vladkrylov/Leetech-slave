@@ -11,6 +11,7 @@ void CAN_Config(void);
 
 void TIM_Config(void);
 void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod);
+void UpdateTimersWidth(uint16_t pulseWidth);
 void PWM_start(void);
 void PWM_stop(void);
 void PWM_Run(uint32_t duration);

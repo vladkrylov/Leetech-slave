@@ -3,15 +3,14 @@
 #include "phil_rele.h"
 #include "phil_i2c.h"
 #include "phil_typedefs.h"
+#include "phil_pid.h"
 
 uint16_t PWM_PERIOD = 260;
-uint16_t PWM_PULSE = 118;
+uint16_t PWM_PULSE = 120;
 
 uint16_t coordinateToSet = 0;
 const uint8_t sizeOfGlobalArrays = 200;
 //#define sizeOfGlobalArrays 100
-
-
 
 uint32_t PulsesToSend[4][2] = {
 		{50000, 50000},
@@ -20,6 +19,8 @@ uint32_t PulsesToSend[4][2] = {
 		{0, 0}};
 uint32_t StepDuration = 100000;
 uint32_t DelayAfterPulses[4][2] = {0};
+
+SPid pid;
 			
 uint16_t coarseBalanceMin = 150;
 uint16_t coarseBalanceMax = 300;
@@ -264,6 +265,14 @@ void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod)
 	TIM4->CNT = PWM_PULSE + 2;
 }
 
+void UpdateTimersWidth(uint16_t pulseWidth)
+{
+	PWM_PULSE = pulseWidth;
+
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+}
+
 void TIM_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -451,10 +460,9 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 
 uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 {
-	uint32_t balancedPulse;
 	uint16_t coord;
 	direction_t direction;
-	
+
 	uint16_t coordinates[sizeOfGlobalArrays] = {0};
 	uint16_t times[sizeOfGlobalArrays] = {0};
 //	uint32_t pulses[sizeOfGlobalArrays] = {0};
@@ -467,7 +475,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 //	pulses[0] = PulsesToSend[motorID-1][direction];
 
 	if (abs(coordinates[0], coordToSet) > coarseBalanceMax) {
-	
+		InitPID(&pid);
 		direction = DetermDirection(coordToSet, coordinates[0]);
 		
 		SetDirection(motorID, direction);
@@ -490,13 +498,16 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
 			
-			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
+//			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
+			
+//			PWM_stop();
+			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
+//			PWM_start();
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
 
 		stopInd = i;
-		i++;
 		
 		while(1) {
 			if (MotorStuck(coordinates, 
@@ -512,6 +523,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		}
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
 		TIM5->CNT = 0;
+		UpdateTimersWidth(120);
 	}
 	// Wait till motor stop moving due to inertion
 	Delay(2000000);
