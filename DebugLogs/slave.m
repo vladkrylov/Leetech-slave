@@ -6,17 +6,17 @@ dest = to_um(params.dest);
 final = to_um(params.final);
 stopInd = params.pulsesStopIndex;
 
-times = in(:,1) / 100;
-disp( diff(times) );
 coords = to_um( in(:,2) );
+len = length(coords);
+% times = [0 : 0.653 : 0.653*(len-1)];
+times = in(:,1) / 100;
+% disp( diff(times) );
 
 coords_pulses = coords(1:stopInd);
 times_pulses = times(1:stopInd);
 
 coords_inertion = coords(stopInd+1:end);
 times_inertion = times(stopInd+1:end);
-
-len = length(times);
 
 figure(1)
 title('Time-Coordinate plot')

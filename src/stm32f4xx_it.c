@@ -198,7 +198,7 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case GET_COORDINATE:
-				finalCoord = GetMotorCoordinate(motorID);
+				finalCoord = GetMotorCoordinate(motorID) + steps2mm * 4096;
 				SendCoordinate(finalCoord, steps2mm);
 //				SendEncoderOutput(encoderOutput, steps2mm, NUMBER_OF_BITS_FROM_ENCODER);
 				break;

@@ -462,6 +462,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 {
 	uint16_t coord;
 	direction_t direction;
+	direction_t oldDirection;
 
 	uint16_t coordinates[sizeOfGlobalArrays] = {0};
 	uint16_t times[sizeOfGlobalArrays] = {0};
@@ -485,10 +486,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		PWM_start();
 
 		while(1) {			
-			if (MotorStuck(coordinates, 
-										(sizeOfGlobalArrays + i-1) % sizeOfGlobalArrays, 
-										 sizeOfGlobalArrays, 
-										 20)) {
+			if (MotorStuck(coordinates, PrevInd(i), 20)) {
 				PWM_stop();
 				break;
 			}
@@ -496,7 +494,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
-			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
+			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
 //			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
 			
@@ -504,26 +502,31 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
 //			PWM_start();
 			
+			oldDirection = direction;
+			direction = DetermDirection(coordToSet, coordinates[i]);
+			if (oldDirection != direction) {
+				PWM_stop();
+				break;
+//				SetDirection(motorID, direction);
+//				PWM_start();
+			}
+			
 			i++; i %= sizeOfGlobalArrays;
 		}
 
 		stopInd = i;
 		
 		while(1) {
-			if (MotorStuck(coordinates, 
-										(sizeOfGlobalArrays + i-1) % sizeOfGlobalArrays, 
-										 sizeOfGlobalArrays, 
-										 5)) {
-				break;
-			}
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
+			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
 		}
+		
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
 		TIM5->CNT = 0;
-		UpdateTimersWidth(120);
+		UpdateTimers(pid.maxOutputLimit, PWM_PERIOD);
 	}
 	// Wait till motor stop moving due to inertion
 	Delay(2000000);
@@ -617,25 +620,15 @@ void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* next
 
 uint8_t MotorStuck(uint16_t* coordArray, 
 									 uint8_t lastReceivedCoordinateIndex,
-									 uint8_t coordArraySize, 
 									 uint8_t numOfRepeats)
 {
-	uint8_t i, ind, indPrev;
+	uint8_t i;
 	uint8_t res = 1;
 	
 	for(i=0; i < numOfRepeats-1; i++) {
-		if ( lastReceivedCoordinateIndex > i ) {
-			ind = lastReceivedCoordinateIndex - i;
-			indPrev = ind - 1;
-		} else if (lastReceivedCoordinateIndex == i) {
-			ind = 0;
-			indPrev = coordArraySize - 1;
-		} else {
-			ind = coordArraySize + lastReceivedCoordinateIndex - i;
-			indPrev = ind - 1;
-		}
-		
-		if (abs(coordArray[ind], coordArray[indPrev]) > 4) {
+		if (abs(coordArray[lastReceivedCoordinateIndex], 
+						coordArray[PrevIndN(lastReceivedCoordinateIndex, i+1)]) > 4) 
+		{
 			res = 0;
 			break;
 		}
@@ -664,7 +657,7 @@ uint16_t Reset(uint8_t motorID)
 	
 	PWM_start();
 	while(1) {
-		if (MotorStuck(coordinates, i-1, sizeOfGlobalArrays, 40)) {
+		if (MotorStuck(coordinates, PrevInd(i), 40)) {
 			PWM_stop();
 			
 			Delay(100000);
@@ -678,17 +671,16 @@ uint16_t Reset(uint8_t motorID)
 
 void Test(uint8_t motorID)
 {
-//		SetDirection(motorID, FORWARD);
-//		PWM_Run(10000000);
+	uint8_t i = 0;
 	
-//	int i = 0;
-//	for(i=0; i<3; i++) {
+	UpdateTimers(PWM_PERIOD/2 - 5, PWM_PERIOD);
+	for(i=0; i<2; i++) {
 		SetDirection(motorID, FORWARD);
-		PWM_Run(50000000);
+		PWM_Run(5000000);
 		
 		SetDirection(motorID, BACK);
 		PWM_Run(5000000);
-//	}
+	}
 }
 
 void TestPulsesForOscilloscope()
@@ -696,3 +688,12 @@ void TestPulsesForOscilloscope()
 		PWM_Run(100000000);
 }
 
+uint8_t PrevInd(uint8_t i) 
+{
+	return PrevIndN(i, 1);
+}
+
+uint8_t PrevIndN(uint8_t i, uint8_t n) 
+{
+	return (sizeOfGlobalArrays + i-n) % sizeOfGlobalArrays;
+}

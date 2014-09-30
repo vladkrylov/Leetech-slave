@@ -5,6 +5,8 @@
 
 typedef struct
 {
+	uint16_t numOfPoints;
+	
   int dState;                  // Last position input
   int iState;                  // Integrator state
   int iMax, iMin;      
@@ -12,6 +14,10 @@ typedef struct
   float    iGain,        // integral gain
             pGain,        // proportional gain
             dGain;         // derivative gain
+	float pKGain, Kpk;
+	
+	int minOutputLimit;
+	int maxOutputLimit;
 } SPid;
 
 void InitPID(SPid* s);

@@ -15,6 +15,8 @@ void UpdateTimersWidth(uint16_t pulseWidth);
 void PWM_start(void);
 void PWM_stop(void);
 void PWM_Run(uint32_t duration);
+uint8_t PrevInd(uint8_t i);
+uint8_t PrevIndN(uint8_t i, uint8_t n);
 
 void PulseStepsDelayUpdate();
 void PulseStepsDelayConfigure(uint32_t newDelay);
@@ -45,8 +47,7 @@ void TestPulsesForOscilloscope();
 uint32_t RExp(uint32_t x);
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint8_t lastReceivedCoordinateIndex, 
-									 uint8_t coordArraySize, 
+									 uint8_t lastReceivedCoordinateIndex,
 									 uint8_t numOfRepeats);
 uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion);
 

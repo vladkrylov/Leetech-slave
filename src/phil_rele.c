@@ -33,6 +33,7 @@ void MotorSwitchInit(void)
 
 void SetDirection(uint8_t motorID, direction_t direction)
 {
+	rDelay(500000);
 	switch(motorID) {
 		case 1:
 			if (direction == FORWARD) {

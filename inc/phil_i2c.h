@@ -22,6 +22,7 @@ void I2C_stop(I2C_TypeDef* );
 void GetEncoderOutput(uint8_t motorID);
 
 uint16_t abs(uint16_t x, uint16_t y);
+int absI(int x, int y);
 
 uint16_t GetMotorCoordinate(uint8_t motorID);
 uint16_t GetFullMotorCoordinate(uint16_t lastMeasuredCoordinate);

@@ -1,21 +1,4 @@
 function slave()
-in = load('TimeCoords.log');
-params = ReadYaml('Params.yaml');
-
-dest = to_um(params.dest);
-final = to_um(params.final);
-stopInd = params.pulsesStopIndex;
-
-times = in(:,1) / 100;
-disp( diff(times) );
-coords = to_um( in(:,2) );
-
-coords_pulses = coords(1:stopInd);
-times_pulses = times(1:stopInd);
-coords_inertion = to_um( in(:,2) );
-
-len = length(times);
-
 figure(1)
 title('Time-Coordinate plot')
 xlabel('t, ms')
@@ -23,7 +6,26 @@ ylabel('Coordinate, \mum')
 hold on
     plot(times_pulses, coords_pulses, 'bo-');
     plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
-    plot(times(end), final, 'g*');
+    plot(times_inertion, coords_inertion, 'g*');
+in = load('TimeCoords.log');
+params = ReadYaml('Params.yaml');
+
+dest = to_um(params.dest);
+final = to_um(params.final);
+stopInd = params.pulsesStopIndex;
+
+coords = to_um( in(:,2) );
+len = length(coords);
+% times = [0 : 0.653 : 0.653*(len-1)];
+times = in(:,1) / 100;
+% disp( diff(times) );
+
+coords_pulses = coords(1:stopInd);
+times_pulses = times(1:stopInd);
+
+coords_inertion = coords(stopInd+1:end);
+times_inertion = times(stopInd+1:end);
+
 hold off
 
 % PrintInertionData( (coords_pulses(end) - coords_pulses(end-1)) / (times(end) - times(end-1)) , ...
