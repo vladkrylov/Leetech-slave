@@ -12,73 +12,11 @@ uint16_t coordinateToSet = 0;
 const uint8_t sizeOfGlobalArrays = 200;
 //#define sizeOfGlobalArrays 100
 
-uint32_t PulsesToSend[4][2] = {
-		{50000, 50000},
-		{50000, 50000},
-		{0, 0},
-		{0, 0}};
-uint32_t StepDuration = 100000;
-uint32_t DelayAfterPulses[4][2] = {0};
-
 SPid pid;
-			
-uint16_t coarseBalanceMin = 150;
-uint16_t coarseBalanceMax = 300;
-
-uint16_t fineBalanceMin = 4;
-uint16_t fineBalanceMax = 8;
 
 CAN_InitTypeDef        CAN_InitStructure;
 CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 CanTxMsg TxMessage;
-
-void PulseStepsDelayUpdate()
-{
-	uint8_t motor_i;
-	direction_t dir_i;
-
-	for (motor_i=0; motor_i<4; motor_i++) {
-	for (dir_i=BACK; dir_i<=FORWARD; dir_i++) {
-		if (StepDuration > PulsesToSend[motor_i][dir_i]) {
-			DelayAfterPulses[motor_i][dir_i] = StepDuration - PulsesToSend[motor_i][dir_i];
-		} else {
-			DelayAfterPulses[motor_i][dir_i] = 3000;
-		}
-	}
-	}
-}
-
-void PulseStepsDelayConfigure(uint32_t newDelay)
-{
-	StepDuration = newDelay;
-	PulseStepsDelayUpdate();
-}
-
-void PulseStepsRunConfigure(uint32_t newStep, uint8_t motorIndex, direction_t dir)
-{
-	PulsesToSend[motorIndex][dir] = newStep;
-	PulseStepsDelayUpdate();
-}
-
-uint32_t KeepCoarseBalance(uint16_t* coordsArray, uint16_t lastCoordinateIndex, uint16_t size, uint32_t pulseDuration)
-{
-	uint16_t prevIndex;
-	uint16_t diff;
-	uint32_t balancedPulseDuration = pulseDuration;
-	
-	if (lastCoordinateIndex < 2) return pulseDuration;
-	
-	prevIndex = (lastCoordinateIndex-1) % size;
-	diff = abs(coordsArray[lastCoordinateIndex], coordsArray[lastCoordinateIndex-1]);
-	if (diff < 20) return pulseDuration;
-	
-	if ( (diff < coarseBalanceMin) || (diff > coarseBalanceMax) ){
-//		balancedPulseDuration = pulseDuration * (coarseBalanceMin + coarseBalanceMax) / (2. * diff);
-		balancedPulseDuration = pulseDuration * coarseBalanceMin / diff;
-	}
-	
-	return balancedPulseDuration;
-}
 
 /* Delay -----------------------------------------------*/	
 void Delay(uint32_t delay)
@@ -475,7 +413,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	times[0] = 0;
 //	pulses[0] = PulsesToSend[motorID-1][direction];
 
-	if (abs(coordinates[0], coordToSet) > coarseBalanceMax) {
+	if (abs(coordinates[0], coordToSet) > 300) {
 		InitPID(&pid);
 		direction = DetermDirection(coordToSet, coordinates[0]);
 		
@@ -533,71 +471,69 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 	// And receive its coordinate
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
-	
-//	PreseciousMove(motorID, &coord, coordToSet, &steps2mm);
 		
 	return coord;
 }
 
-void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm)
+uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
-//	uint16_t coord = *coordToReturn;
-//	uint16_t lastCoord = coord;
-//	uint32_t Npulses = 0;
-//	uint16_t coords[sizeOfGlobalArrays] = {0};
-//	uint16_t difcoords[sizeOfGlobalArrays] = {0};
-//	uint16_t pulses[sizeOfGlobalArrays] = {0};
-//	uint16_t i = 1;
-//	uint32_t stepRepeats;
-////	double Kp = 2.;
-////	double Ki = 0.;
-////	double Kd = 0.;
+	uint16_t coord;
+	direction_t direction;
 
-//	direction_t direction = DetermDirection(coordToSet, coord);
-//	direction_t lastDirection = direction;
-//	SetDirection(motorID, direction);
-//	
-////	Npulses = RExp(abs(coordToSet, coord));
-//	Npulses = 10000;
-//	coords[0] = coord;
+	uint16_t coordinates[sizeOfGlobalArrays] = {0};
+	uint16_t times[sizeOfGlobalArrays] = {0};
 
-//	while(abs(coordToSet, coord) > 20) {
-//		if (direction != lastDirection) {
-//			lastDirection = direction;
-//			SetDirection(motorID, direction);
-//		}
-//		
-//		PWM_Run(Npulses);
-//		Delay(100000);
-//		
-//		lastCoord = coord;
-//		coord = *steps2mm * 4096 + GetMotorCoordinate(motorID);
-//		Check4OverStep2mm(direction, lastCoord, &coord, steps2mm);
-//		coords[i] = coord;
-//		pulses[i-1] = Npulses;
-//		difcoords[i-1] = coord - lastCoord;
-//		
-//		direction = DetermDirection(coordToSet, coord);
-//		
-////		if (i > 2) {
-////			Npulses = Npulses + Kp*(abs(coords[i], coords[i-1]) - abs(coords[i-1], coords[i-2])) + 
-////													Ki*(abs(coords[i], coords[i-1])) + 
-////													Kd*(abs(coords[i], coords[i-1]) - 2*abs(coords[i-1], coords[i-2]) + abs(coords[i-2], coords[i-3]));
-////		}
-//		if (coord != lastCoord) {
-//			stepRepeats = 1;
-//			Npulses = Npulses * abs(coordToSet, coord) / abs(coord, lastCoord) * stepRepeats / 4;
-//			if (!Npulses) {
-//				Npulses = 10;
-//			}
-//		}
-//		else {
-//			Npulses = Npulses * 5 / 4;
-//			stepRepeats++;
-//		}
-//		
-//		i++; i %= sizeOfGlobalArrays;
-//	}
+	uint8_t i = 1;
+	uint8_t stopInd = 0;
+
+	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
+	times[0] = 0;
+
+	if (abs(coordinates[0], coordToSet) > precision) {
+		direction = DetermDirection(coordToSet, coordinates[0]);
+		SetDirection(motorID, direction);
+		
+		TIM5->CNT = 0;
+		TIM5->CR1 |= TIM_CR1_CEN;
+		PWM_start();
+
+		while(1) {			
+			if (MotorStuck(coordinates, PrevInd(i), 30)) {
+				PWM_stop();
+				break;
+			}
+			
+			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
+			times[i] = TIM5->CNT;
+			
+			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
+			
+			if (abs(coordinates[i], coordToSet) < precision) {
+				PWM_stop();
+				break;
+			}
+			
+			i++; i %= sizeOfGlobalArrays;
+		}
+
+		stopInd = i;
+		
+		while(1) {
+			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
+			times[i] = TIM5->CNT;
+			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
+			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
+			i++; i %= sizeOfGlobalArrays;
+		}
+		
+		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
+		TIM5->CNT = 0;
+	}
+
+	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
+	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
+		
+	return coord;
 }
 
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)

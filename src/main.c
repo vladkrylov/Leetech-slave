@@ -11,6 +11,27 @@ uint16_t origins[4] = {0};
   * @param  None
   * @retval None
   */
+
+void HotfixTest()
+{
+	uint8_t i;
+	uint8_t motorID = 1;
+	uint16_t fineBalanceMax = 100;
+	uint16_t coarseBalanceMax = 500;
+	uint16_t coord;
+	uint16_t coordToSet = 10000;
+	
+//		Reset(motorID);
+	coord = HotfixMove(motorID, coordToSet, 0, coarseBalanceMax);
+	for(i=0; i<4; i++) {
+		if (abs(coord, coordToSet) < fineBalanceMax)
+			break;
+		else
+			coord = HotfixMove(motorID, coordToSet, coord / 4096, fineBalanceMax);
+	}
+	Delay(10000000);
+}
+
 int main(void)
 {
   /* NVIC configuration */
@@ -28,15 +49,11 @@ int main(void)
 	TIM_Config();
 	MotorSwitchInit();
 	
-	MOTOR_1_B
-	GPIOE->ODR ^= GPIO_Pin_12;
+	HotfixTest();
 	
-//	Usart3_Send_String("Hello world!");
   while(1)
   {
-//		GetCoordinate(encoderOutput);
-//		PrintCoordinate(encoderOutput);
-//		Delay(20000000);
+
   }
 }
 

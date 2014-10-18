@@ -10,7 +10,7 @@ void InitPID(SPid* s)
 	
 	s->pGain = 0.02;
 	s->iGain = 0.001;
-	s->dGain = 0.2;
+	s->dGain = 0.;
 	
 	s->pKGain = 1.;
 	s->Kpk = 0.01;

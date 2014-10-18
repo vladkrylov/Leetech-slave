@@ -26,6 +26,9 @@ hold on
     plot(times_pulses, coords_pulses, 'bo-');
     plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
     plot(times_inertion, coords_inertion, 'g*');
+    
+    % fitted plot
+    plot(times_pulses, fitmodel(times_pulses, coords_pulses, coords_pulses(1)), 'r.')
 hold off
 
 % PrintInertionData( (coords_pulses(end) - coords_pulses(end-1)) / (times(end) - times(end-1)) , ...
@@ -43,4 +46,16 @@ function PrintInertionData(speed, deviation)
     fclose(fileID);
 end
 
+function res = fitmodel(t, x, x0)
+% x(1) = beta
+% x(2) = gamma
+F = @(pars,xdata) x0 + pars(1) * (xdata - 1/pars(2) * (1 - exp( -pars(2) * xdata) ));
+x_init = [1 1];
+[xfitted,resnorm,~,exitflag,output] = lsqcurvefit(F,x_init,t,x)
+res = F(xfitted, t);
 
+% FittedCoeficientsFile = fopen('FittedCoeficients.txt','a');
+% fprintf(FittedCoeficientsFile,'%6.2f\t%6.4f\n', xfitted(1), xfitted(2));
+% fclose(FittedCoeficientsFile);
+
+end

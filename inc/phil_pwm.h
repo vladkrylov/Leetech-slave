@@ -18,11 +18,6 @@ void PWM_Run(uint32_t duration);
 uint8_t PrevInd(uint8_t i);
 uint8_t PrevIndN(uint8_t i, uint8_t n);
 
-void PulseStepsDelayUpdate();
-void PulseStepsDelayConfigure(uint32_t newDelay);
-void PulseStepsRunConfigure(uint32_t newStep, uint8_t motorIndex, direction_t dir);
-uint32_t KeepCoarseBalance(uint16_t* coordsArray, uint16_t lastCoordinateIndex, uint16_t size, uint32_t pulseDuration);
-
 void PWM_Run_test(uint32_t coordinate);
 
 void SetDestinationCoordinate(uint16_t);
@@ -35,8 +30,7 @@ void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length);
 void SendArray8Bytes(uint8_t* data);
 
 void Move1Unit(uint8_t motorID, direction_t direction);
-void PreseciousMove(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm);
-void PreseciousMoveTest(uint8_t motorID, uint16_t* coordToReturn, uint16_t coordToSet, uint8_t* steps2mm);
+uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision);
 uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm);
 uint16_t Reset(uint8_t motorID);
 

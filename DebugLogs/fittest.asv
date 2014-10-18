@@ -1,0 +1,16 @@
+function fittest()
+t = 0.1: 0.2: 10;
+y = t.^2 + 3 * rand(size(t));
+
+F = @(x,xdata) x(1) * xdata ^ x(2);
+x0 = [1 1];
+[x,resnorm,~,exitflag,output] = lsqcurvefit(F,x0,t,y)
+
+figure(1)
+hold on
+    plot(t, y, '.')
+    plot()
+hold off
+
+    
+end
