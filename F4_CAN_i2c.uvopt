@@ -138,7 +138,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
-          <Name>-U-O8398 -O8398 -S3 -C0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC800 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000</Name>
+          <Name>-U -O8398 -S3 -C0 -N00("ARM CoreSight SW-DP") -D00(2BA01477) -L00(0) -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO15 -FD20000000 -FC800 -FN1 -FF0STM32F4xx_1024 -FS08000000 -FL0100000</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -150,7 +150,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>517</LineNumber>
+          <LineNumber>529</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -160,22 +160,6 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>D:\TBONE\Arm\STM32F4-DISCOVERY\F4_CAN_i2c\src\phil_pwm.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>191</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>D:\TBONE\Arm\STM32F4-DISCOVERY\F4_CAN_i2c\src\stm32f4xx_it.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -210,11 +194,6 @@
           <count>5</count>
           <WinNumber>1</WinNumber>
           <ItemText>PWM_PULSE</ItemText>
-        </Ww>
-        <Ww>
-          <count>6</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pid</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -294,7 +273,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>172</TopLine>
+      <TopLine>174</TopLine>
       <CurrentLine>182</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup_stm32f40xx.s</PathWithFileName>
@@ -334,7 +313,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>7</TopLine>
+      <TopLine>9</TopLine>
       <CurrentLine>17</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\main.c</PathWithFileName>
@@ -380,10 +359,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>45</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>182</TopLine>
-      <CurrentLine>191</CurrentLine>
+      <TopLine>181</TopLine>
+      <CurrentLine>202</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -430,7 +409,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>502</TopLine>
+      <TopLine>504</TopLine>
       <CurrentLine>514</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pwm.c</PathWithFileName>
@@ -446,8 +425,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>32</TopLine>
-      <CurrentLine>34</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>26</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_rele.c</PathWithFileName>
       <FilenameWithoutPath>phil_rele.c</FilenameWithoutPath>
@@ -462,7 +441,7 @@
       <Focus>0</Focus>
       <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1266</TopLine>
+      <TopLine>1268</TopLine>
       <CurrentLine>1284</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_i2c.c</PathWithFileName>
@@ -510,7 +489,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>120</TopLine>
+      <TopLine>122</TopLine>
       <CurrentLine>129</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_i2c.c</PathWithFileName>
@@ -572,9 +551,9 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>3</TopLine>
+      <TopLine>5</TopLine>
       <CurrentLine>10</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pid.c</PathWithFileName>
