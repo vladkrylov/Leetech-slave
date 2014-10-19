@@ -49,7 +49,7 @@ int main(void)
 	TIM_Config();
 	MotorSwitchInit();
 	
-	HotfixTest();
+//	HotfixTest();
 	
   while(1)
   {
