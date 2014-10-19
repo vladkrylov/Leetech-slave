@@ -198,7 +198,7 @@ void CAN1_RX0_IRQHandler(void)
 					if (abs(coordinateToSet, finalCoord) < precesion)
 						break;
 					else
-						finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, precesion);
+						finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, finalCoord / 4096, precesion);
 				}
 				SendCoordinate(finalCoord, finalCoord / 4096);
 //				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
