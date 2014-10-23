@@ -138,7 +138,7 @@ void CAN_Config(void)
   CAN_FilterInit(&CAN_FilterInitStructure);
   
   /* Transmit Structure preparation */
-  TxMessage.StdId = 0x322;
+  TxMessage.StdId = 0x122;
   TxMessage.ExtId = 0x02;
   TxMessage.RTR = CAN_RTR_DATA;
   TxMessage.IDE = CAN_ID_STD;
@@ -508,7 +508,10 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 			
 			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
-			if (abs(coordinates[i], coordToSet) < precision) {
+			if ((abs(coordinates[i], coordToSet) < precision) || 
+					((direction == FORWARD) && (coordinates[i] >= coordToSet)) ||
+					((direction == BACK) && (coordinates[i] <= coordToSet))
+				 ) {
 				PWM_stop();
 				break;
 			}

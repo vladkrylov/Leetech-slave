@@ -33,7 +33,7 @@ void MotorSwitchInit(void)
 
 void SetDirection(uint8_t motorID, direction_t direction)
 {
-	rDelay(5000000);
+	rDelay(500000);
 	switch(motorID) {
 		case 1:
 			if (direction == FORWARD) {
@@ -69,5 +69,5 @@ void SetDirection(uint8_t motorID, direction_t direction)
 	// Wait until rele will switch
 	// Don't remove this delay!
 	// It causes a strong cross-talk on the 3.3V bus
-	rDelay(5000000);
+	rDelay(500000);
 }

@@ -172,7 +172,6 @@ void CAN1_RX0_IRQHandler(void)
 	uint8_t i;
 	commands_t action;
 	uint16_t coordinateToSet;
-	uint16_t precesion = 100;
 	uint16_t finalCoord;
 	uint8_t motorID;
 	uint8_t steps2mm;
@@ -193,13 +192,7 @@ void CAN1_RX0_IRQHandler(void)
 			case MOVE:
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
 			
-				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, precesion * 5);
-				for(i=0; i<5; i++) {
-					if (abs(coordinateToSet, finalCoord) < precesion)
-						break;
-					else
-						finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, finalCoord / 4096, precesion);
-				}
+				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 500);
 				SendCoordinate(finalCoord, finalCoord / 4096);
 //				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
 				break;
