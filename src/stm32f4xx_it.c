@@ -227,7 +227,7 @@ void CAN1_RX0_IRQHandler(void)
 				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);;
 				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);;
 			
-				UpdateTimers(newPulseWidth, newPulsePeriod);
+				UpdateTimers(motorID, newPulseWidth, newPulsePeriod);
 				break;
 		}
 	}

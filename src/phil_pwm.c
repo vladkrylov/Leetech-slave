@@ -5,6 +5,9 @@
 #include "phil_typedefs.h"
 #include "phil_pid.h"
 
+const uint8_t N_MOTORS = 4;
+
+uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 260, 260};
 uint16_t PWM_PERIOD = 260;
 uint16_t PWM_PULSE = 120;
 
@@ -189,18 +192,11 @@ void Init_RxMes(CanRxMsg *RxMessage)
   }
 }
 
-void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod)
+// motorID = 1...N_MOTORS
+void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
 {
 	PWM_PULSE = pulseWidth;
-  PWM_PERIOD = puslePeriod;
-
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
-	TIM3->ARR = PWM_PERIOD;
-	TIM4->ARR = PWM_PERIOD;
-
-	TIM3->CNT = PWM_PULSE + 2;
-	TIM4->CNT = PWM_PULSE + 2;
+  PWM_PERIODS[motorID-1] = pulsePeriod;
 }
 
 void UpdateTimersWidth(uint16_t pulseWidth)
@@ -209,6 +205,21 @@ void UpdateTimersWidth(uint16_t pulseWidth)
 
 	TIM3->CCR1 = PWM_PULSE;
 	TIM4->CCR4 = PWM_PULSE;
+}
+
+// This function must be called before any movings on motor applied
+// motorID = 1...N_MOTORS
+void ApplyMotorSettings(uint8_t motorID)
+{
+	PWM_PERIOD = PWM_PERIODS[motorID-1];
+	
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+	TIM3->ARR = PWM_PERIOD;
+	TIM4->ARR = PWM_PERIOD;
+
+	TIM3->CNT = PWM_PULSE + 2;
+	TIM4->CNT = PWM_PULSE + 2;
 }
 
 void TIM_Config(void)
@@ -335,8 +346,10 @@ void TIM_Config(void)
 	TIM4->CNT = PWM_PULSE + 2;
 }
 
-void PWM_start(void)
+void PWM_start(uint8_t motorID)
 {
+	ApplyMotorSettings(motorID);
+	
 	TIM3->CNT = PWM_PULSE;
 	TIM4->CNT = TIM3->CNT + (PWM_PERIOD)/2 + 1;	
 	
@@ -359,11 +372,11 @@ void PWM_stop(void)
 	TIM4->CNT = PWM_PULSE + 2;	
 }
 
-void PWM_Run(uint32_t duration)
+void PWM_Run(uint8_t motorID, uint32_t duration)
 {
 	uint32_t i = 0;
 	
-	PWM_start();
+	PWM_start(motorID);
 	for(i=0; i<duration; i++);
 	PWM_stop();
 }
@@ -382,7 +395,7 @@ void Move1Unit(uint8_t motorID, direction_t direction)
 {
 	SetDirection(motorID, direction);
 	Delay(500000);
-	PWM_Run(500000);
+	PWM_Run(motorID, 500000);
 }
 
 direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
@@ -421,7 +434,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		
 		TIM5->CNT = 0;
 		TIM5->CR1 |= TIM_CR1_CEN;
-		PWM_start();
+		PWM_start(motorID);
 
 		while(1) {			
 			if (MotorStuck(coordinates, PrevInd(i), 20)) {
@@ -464,7 +477,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
 		
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
 		TIM5->CNT = 0;
-		UpdateTimers(pid.maxOutputLimit, PWM_PERIOD);
+		UpdateTimers(motorID, pid.maxOutputLimit, PWM_PERIOD);
 	}
 	// Wait till motor stop moving due to inertion
 	Delay(2000000);
@@ -495,7 +508,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 		
 		TIM5->CNT = 0;
 		TIM5->CR1 |= TIM_CR1_CEN;
-		PWM_start();
+		PWM_start(motorID);
 
 		while(1) {			
 			if (MotorStuck(coordinates, PrevInd(i), 30)) {
@@ -594,7 +607,7 @@ uint16_t Reset(uint8_t motorID)
 	SetDirection(motorID, BACK);
 	coordinates[0] = GetMotorCoordinate(motorID);
 	
-	PWM_start();
+	PWM_start(motorID);
 	while(1) {
 		if (MotorStuck(coordinates, PrevInd(i), 40)) {
 			PWM_stop();
@@ -612,19 +625,19 @@ void Test(uint8_t motorID)
 {
 	uint8_t i = 0;
 	
-	UpdateTimers(PWM_PERIOD/2 - 5, PWM_PERIOD);
+	UpdateTimers(motorID, PWM_PERIOD/2 - 5, PWM_PERIOD);
 	for(i=0; i<2; i++) {
 		SetDirection(motorID, FORWARD);
-		PWM_Run(5000000);
+		PWM_Run(motorID, 5000000);
 		
 		SetDirection(motorID, BACK);
-		PWM_Run(5000000);
+		PWM_Run(motorID, 5000000);
 	}
 }
 
 void TestPulsesForOscilloscope()
 {
-		PWM_Run(100000000);
+		PWM_Run(1, 100000000);
 }
 
 uint8_t PrevInd(uint8_t i) 

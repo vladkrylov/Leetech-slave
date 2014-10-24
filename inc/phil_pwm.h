@@ -8,13 +8,16 @@ void Delay(uint32_t delay);
 
 void NVIC_Config(void);
 void CAN_Config(void);
-
 void TIM_Config(void);
-void UpdateTimers(uint16_t pulseWidth, uint16_t puslePeriod);
+
+void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod);
 void UpdateTimersWidth(uint16_t pulseWidth);
-void PWM_start(void);
+void ApplyMotorSettings(uint8_t motorID);
+
+void PWM_start(uint8_t motorID);
 void PWM_stop(void);
-void PWM_Run(uint32_t duration);
+void PWM_Run(uint8_t motorID, uint32_t duration);
+
 uint8_t PrevInd(uint8_t i);
 uint8_t PrevIndN(uint8_t i, uint8_t n);
 
