@@ -180,7 +180,7 @@ void CAN1_RX0_IRQHandler(void)
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
-  if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
+  if ((RxMessage.StdId == 0x322)&&(RxMessage.IDE == CAN_ID_STD)) {
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
 		action = RxMessage.Data[3];
@@ -245,7 +245,7 @@ void CAN2_RX0_IRQHandler(void)
 {
   CAN_Receive(CAN2, CAN_FIFO0, &RxMessage);
 
-  if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD))
+  if ((RxMessage.StdId == 0x322)&&(RxMessage.IDE == CAN_ID_STD))
   {
 
   }

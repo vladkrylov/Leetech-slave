@@ -7,7 +7,7 @@
 
 const uint8_t N_MOTORS = 4;
 
-uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 260, 260};
+uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 255, 255};
 uint16_t PWM_PERIOD = 260;
 uint16_t PWM_PULSE = 120;
 
