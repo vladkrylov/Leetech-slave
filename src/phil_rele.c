@@ -71,3 +71,5 @@ void SetDirection(uint8_t motorID, direction_t direction)
 	// It causes a strong cross-talk on the 3.3V bus
 	rDelay(500000);
 }
+
+

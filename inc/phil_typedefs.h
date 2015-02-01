@@ -12,3 +12,5 @@ typedef enum {NOTHING, MOVE, RESET_ONE, RESET_ALL, GET_COORDINATE, TEST, TEST_OS
 commands_t WhatToDo(uint8_t symbol);
 
 #endif // __PHIL_TYPEDEFS_H
+
+

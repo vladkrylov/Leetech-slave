@@ -18,8 +18,8 @@ void PWM_start(uint8_t motorID);
 void PWM_stop(void);
 void PWM_Run(uint8_t motorID, uint32_t duration);
 
-uint8_t PrevInd(uint8_t i);
-uint8_t PrevIndN(uint8_t i, uint8_t n);
+uint16_t PrevInd(uint16_t i);
+uint16_t PrevIndN(uint16_t i, uint16_t n);
 
 void PWM_Run_test(uint32_t coordinate);
 
@@ -39,12 +39,12 @@ uint16_t Reset(uint8_t motorID);
 
 // Tests
 void Test(uint8_t motorID);
-void TestPulsesForOscilloscope();
+//void TestPulsesForOscilloscope();
 
 uint32_t RExp(uint32_t x);
 void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint8_t lastReceivedCoordinateIndex,
+									 uint16_t lastReceivedCoordinateIndex,
 									 uint8_t numOfRepeats);
 uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion);
 

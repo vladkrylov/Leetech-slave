@@ -7,13 +7,16 @@
 
 const uint8_t N_MOTORS = 4;
 
-uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 255, 255};
-uint16_t PWM_PERIOD = 260;
-uint16_t PWM_PULSE = 120;
+static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
+static uint16_t PWM_PERIOD = 260;
+static uint16_t PWM_PULSE = 120;
 
-uint16_t coordinateToSet = 0;
-const uint8_t sizeOfGlobalArrays = 200;
-//#define sizeOfGlobalArrays 100
+static uint16_t coordinateToSet = 0;
+const uint16_t sizeOfGlobalArrays = 2000;
+
+uint16_t pulseValues[sizeOfGlobalArrays] = {0};
+uint16_t coordinates[sizeOfGlobalArrays] = {0};
+uint16_t times[sizeOfGlobalArrays] = {0};
 
 SPid pid;
 
@@ -192,36 +195,6 @@ void Init_RxMes(CanRxMsg *RxMessage)
   }
 }
 
-// motorID = 1...N_MOTORS
-void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
-{
-	PWM_PULSE = pulseWidth;
-  PWM_PERIODS[motorID-1] = pulsePeriod;
-}
-
-void UpdateTimersWidth(uint16_t pulseWidth)
-{
-	PWM_PULSE = pulseWidth;
-
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
-}
-
-// This function must be called before any movings on motor applied
-// motorID = 1...N_MOTORS
-void ApplyMotorSettings(uint8_t motorID)
-{
-	PWM_PERIOD = PWM_PERIODS[motorID-1];
-	
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
-	TIM3->ARR = PWM_PERIOD;
-	TIM4->ARR = PWM_PERIOD;
-
-	TIM3->CNT = PWM_PULSE + 2;
-	TIM4->CNT = PWM_PULSE + 2;
-}
-
 void TIM_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -391,13 +364,6 @@ uint32_t GetCoordinateToSet(void)
 	return coordinateToSet;
 }
 
-void Move1Unit(uint8_t motorID, direction_t direction)
-{
-	SetDirection(motorID, direction);
-	Delay(500000);
-	PWM_Run(motorID, 500000);
-}
-
 direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 {
 	direction_t direction;
@@ -409,98 +375,17 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 	return direction;
 }
 
-uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
-{
-	uint16_t coord;
-	direction_t direction;
-	direction_t oldDirection;
-
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
-//	uint32_t pulses[sizeOfGlobalArrays] = {0};
-
-	uint8_t i = 1;
-	uint8_t stopInd = 0;
-
-	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	times[0] = 0;
-//	pulses[0] = PulsesToSend[motorID-1][direction];
-
-	if (abs(coordinates[0], coordToSet) > 300) {
-		InitPID(&pid);
-		direction = DetermDirection(coordToSet, coordinates[0]);
-		
-		SetDirection(motorID, direction);
-		
-		TIM5->CNT = 0;
-		TIM5->CR1 |= TIM_CR1_CEN;
-		PWM_start(motorID);
-
-		while(1) {			
-			if (MotorStuck(coordinates, PrevInd(i), 20)) {
-				PWM_stop();
-				break;
-			}
-			
-			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-			times[i] = TIM5->CNT;
-			
-			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
-			
-//			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
-			
-//			PWM_stop();
-			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
-//			PWM_start();
-			
-			oldDirection = direction;
-			direction = DetermDirection(coordToSet, coordinates[i]);
-			if (oldDirection != direction) {
-				PWM_stop();
-				break;
-//				SetDirection(motorID, direction);
-//				PWM_start();
-			}
-			
-			i++; i %= sizeOfGlobalArrays;
-		}
-
-		stopInd = i;
-		
-		while(1) {
-			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-			times[i] = TIM5->CNT;
-			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
-			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
-			i++; i %= sizeOfGlobalArrays;
-		}
-		
-		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
-		TIM5->CNT = 0;
-		UpdateTimers(motorID, pid.maxOutputLimit, PWM_PERIOD);
-	}
-	// Wait till motor stop moving due to inertion
-	Delay(2000000);
-	// And receive its coordinate
-	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
-		
-	return coord;
-}
-
 uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
 	direction_t direction;
 
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
-
-	uint8_t i = 1;
-	uint8_t stopInd = 0;
+	uint16_t i = 1;
+	uint16_t stopInd = 0;
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
+	pulseValues[0] = PWM_PULSE;
 
 	if (abs(coordinates[0], coordToSet) > precision) {
 		direction = DetermDirection(coordToSet, coordinates[0]);
@@ -516,6 +401,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 				break;
 			}
 			
+			pulseValues[i] = PWM_PULSE;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
@@ -537,7 +423,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
-			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
+			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -547,7 +433,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 	}
 
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
+	Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coord, &steps2mm);
 		
 	return coord;
 }
@@ -571,7 +457,7 @@ void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* next
 }
 
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint8_t lastReceivedCoordinateIndex,
+									 uint16_t lastReceivedCoordinateIndex,
 									 uint8_t numOfRepeats)
 {
 	uint8_t i;
@@ -624,14 +510,17 @@ uint16_t Reset(uint8_t motorID)
 void Test(uint8_t motorID)
 {
 	uint8_t i = 0;
+	uint32_t moveTime = 10000000;
 	
 	UpdateTimers(motorID, PWM_PERIOD/2 - 5, PWM_PERIOD);
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		SetDirection(motorID, FORWARD);
-		PWM_Run(motorID, 5000000);
+		PWM_Run(motorID, moveTime);
+		Delay(moveTime/10);
 		
 		SetDirection(motorID, BACK);
-		PWM_Run(motorID, 5000000);
+		PWM_Run(motorID, moveTime);
+		Delay(moveTime/10);
 	}
 }
 
@@ -640,12 +529,42 @@ void TestPulsesForOscilloscope()
 		PWM_Run(1, 100000000);
 }
 
-uint8_t PrevInd(uint8_t i) 
+uint16_t PrevInd(uint16_t i) 
 {
 	return PrevIndN(i, 1);
 }
 
-uint8_t PrevIndN(uint8_t i, uint8_t n) 
+uint16_t PrevIndN(uint16_t i, uint16_t n) 
 {
-	return (sizeOfGlobalArrays + i-n) % sizeOfGlobalArrays;
+	return (sizeOfGlobalArrays + i - n) % sizeOfGlobalArrays;
+}
+
+// motorID = 0...N_MOTORS-1
+void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
+{
+	PWM_PULSE = pulseWidth;
+  PWM_PERIODS[motorID] = pulsePeriod;
+}
+
+void UpdateTimersWidth(uint16_t pulseWidth)
+{
+	PWM_PULSE = pulseWidth;
+
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+}
+
+// This function must be called before any movings on motor applied
+// motorID = 1...N_MOTORS
+void ApplyMotorSettings(uint8_t motorID)
+{
+	PWM_PERIOD = PWM_PERIODS[motorID-1];
+	
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+	TIM3->ARR = PWM_PERIOD;
+	TIM4->ARR = PWM_PERIOD;
+
+	TIM3->CNT = PWM_PULSE + 2;
+	TIM4->CNT = PWM_PULSE + 2;
 }

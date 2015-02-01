@@ -180,7 +180,7 @@ void CAN1_RX0_IRQHandler(void)
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
-  if ((RxMessage.StdId == 0x322)&&(RxMessage.IDE == CAN_ID_STD)) {
+  if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
 		action = RxMessage.Data[3];
@@ -220,14 +220,17 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case TEST_OSCILLOSCOPE:
-				TestPulsesForOscilloscope();
+//				TestPulsesForOscilloscope();
 				break;
 			
 			case SET_PULSES:
-				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);;
-				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);;
+				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);
+				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);
 			
 				UpdateTimers(motorID, newPulseWidth, newPulsePeriod);
+				break;
+			
+			case NOTHING:
 				break;
 		}
 	}
