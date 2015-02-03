@@ -1,9 +1,9 @@
 Set_id: Entrance
 Motor_id: 1
-dest: 4096
+dest: 8189
 precision: 500
 pulsesStopIndex: 1
-t: [0, 35265]
+t: [0, 58]
 u: [120, 0]
 x: [0, 0]
 

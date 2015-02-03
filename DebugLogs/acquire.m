@@ -7,8 +7,9 @@ while 1
     pause(0.1)
     modification_time = getModificationTime(log);
     if modification_time > last_modification_time
-%         saveData(yaml);
-        disp('Hello');
+        new_yaml = saveData(yaml);
+        close all;
+        slave(new_yaml);
         last_modification_time = modification_time;
     end
 end

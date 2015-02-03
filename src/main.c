@@ -12,26 +12,6 @@ uint16_t origins[4] = {0};
   * @retval None
   */
 
-void HotfixTest()
-{
-	uint8_t i;
-	uint8_t motorID = 1;
-	uint16_t fineBalanceMax = 100;
-	uint16_t coarseBalanceMax = 500;
-	uint16_t coord;
-	uint16_t coordToSet = 10000;
-	
-//		Reset(motorID);
-	coord = HotfixMove(motorID, coordToSet, 0, coarseBalanceMax);
-	for(i=0; i<4; i++) {
-		if (abs(coord, coordToSet) < fineBalanceMax)
-			break;
-		else
-			coord = HotfixMove(motorID, coordToSet, coord / 4096, fineBalanceMax);
-	}
-	Delay(10000000);
-}
-
 int main(void)
 {
   /* NVIC configuration */
@@ -43,13 +23,9 @@ int main(void)
 	I2C3_Init();
 	
 //	USART3_Init();
-
-//	EXTILine0_Config();
 	
 	TIM_Config();
 	MotorSwitchInit();
-	
-//	HotfixTest();
 	
   while(1)
   {

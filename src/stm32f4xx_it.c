@@ -177,6 +177,7 @@ void CAN1_RX0_IRQHandler(void)
 	uint8_t steps2mm;
 	uint16_t newPulseWidth;
 	uint16_t newPulsePeriod;
+	uint8_t getTrajectory = 0;
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
@@ -191,10 +192,17 @@ void CAN1_RX0_IRQHandler(void)
 		switch (action) {
 			case MOVE:
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
+				getTrajectory = RxMessage.Data[5];
 			
 				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 500);
 				SendCoordinate(finalCoord, finalCoord / 4096);
-//				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
+			
+				if (getTrajectory) {
+					SendTimes();
+					SendUSignal();
+					SendCoordinates();
+				}
+
 				break;
 			
 			case GET_COORDINATE:

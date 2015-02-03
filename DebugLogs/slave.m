@@ -1,10 +1,12 @@
-function slave()
+function slave(yaml)
 %% Function for debugging LEETECH motors moving
 
 %% Load the data
-yamlFile = 'Data.yaml';
-
-saveData(yamlFile);
+if nargin > 0
+    yamlFile = yaml;
+else
+    yamlFile = 'Data.yaml';
+end
 
 [times, u, coords, dest, stopInd] = getData(yamlFile);
 len = length(coords);

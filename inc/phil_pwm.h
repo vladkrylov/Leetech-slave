@@ -42,11 +42,24 @@ void Test(uint8_t motorID);
 //void TestPulsesForOscilloscope();
 
 uint32_t RExp(uint32_t x);
-void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
+void Check4OverStep2mm(uint16_t prevCoord, uint16_t* nextCoordptr, uint8_t* steps2mm);
 uint8_t MotorStuck(uint16_t* coordArray, 
 									 uint16_t lastReceivedCoordinateIndex,
 									 uint8_t numOfRepeats);
 uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion);
+
+// Trajectory transmit routine
+void SendFlag(can_flag f);
+uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len);
+void SendArray(can_flag f, uint16_t *array, uint16_t len);
+
+void SendTimes();
+void SendUSignal();
+void SendCoordinates();
+
+void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2);
+void Wait4TransmissionComplete(uint8_t TransmitMailbox);
+void CAN_SafeTransmit(CanTxMsg* TxMessage);
 
 #endif /* __PHIL_PWM_H */
 

@@ -12,7 +12,7 @@ static uint16_t PWM_PERIOD = 260;
 static uint16_t PWM_PULSE = 120;
 
 static uint16_t coordinateToSet = 0;
-const uint16_t sizeOfGlobalArrays = 2000;
+const uint16_t sizeOfGlobalArrays = 200;
 
 uint16_t pulseValues[sizeOfGlobalArrays] = {0};
 uint16_t coordinates[sizeOfGlobalArrays] = {0};
@@ -33,11 +33,12 @@ void Delay(uint32_t delay)
 
 void SendCoordinate(uint16_t coordindate, uint8_t steps2mm)
 {
-	TxMessage.Data[0] = coordindate >> 8;
-	TxMessage.Data[1] = coordindate & LSBYTE;
+	Convert16to2_8(coordindate, &TxMessage.Data[1], &TxMessage.Data[2]);
+//	TxMessage.Data[0] = coordindate >> 8;
+//	TxMessage.Data[1] = coordindate & LSBYTE;
 	TxMessage.Data[2] = steps2mm;
 	
-	CAN_Transmit(CANx, &TxMessage);
+	CAN_SafeTransmit(&TxMessage);
 }
 
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
@@ -405,7 +406,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
-			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
+			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
 			if ((abs(coordinates[i], coordToSet) < precision) || 
 					((direction == FORWARD) && (coordinates[i] >= coordToSet)) ||
@@ -423,7 +424,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
-			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
+			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -433,25 +434,21 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 	}
 
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coord, &steps2mm);
+	Check4OverStep2mm(coordinates[PrevInd(i)], &coord, &steps2mm);
 		
 	return coord;
 }
 
-void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
+void Check4OverStep2mm(uint16_t prevCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
 {
 	uint16_t nextCoord = *nextCoordptr;
-	
-	if (direction == FORWARD) {
-		if (lastCoord > nextCoord + 2048) {
-			*steps2mm += 1;
-			nextCoord += 4096;
-		}
-	} else {
-		if ((lastCoord < nextCoord) && abs(lastCoord, nextCoord) > 2048) {
-			*steps2mm -= 1;
-			nextCoord -= 4096;
-		}
+	if (prevCoord > nextCoord + 2048) {
+		*steps2mm += 1;
+		nextCoord += 4096;
+	}
+	else if ((prevCoord < nextCoord) && abs(prevCoord, nextCoord) > 2048) {
+		*steps2mm -= 1;
+		nextCoord -= 4096;
 	}
 	*nextCoordptr = nextCoord;
 }
@@ -462,6 +459,8 @@ uint8_t MotorStuck(uint16_t* coordArray,
 {
 	uint8_t i;
 	uint8_t res = 1;
+	
+	if (coordArray[lastReceivedCoordinateIndex] == 0) return 0;
 	
 	for(i=0; i < numOfRepeats-1; i++) {
 		if (abs(coordArray[lastReceivedCoordinateIndex], 
@@ -544,7 +543,7 @@ void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
 {
 	PWM_PULSE = pulseWidth;
   PWM_PERIODS[motorID] = pulsePeriod;
-}
+} 
 
 void UpdateTimersWidth(uint16_t pulseWidth)
 {
@@ -567,4 +566,80 @@ void ApplyMotorSettings(uint8_t motorID)
 
 	TIM3->CNT = PWM_PULSE + 2;
 	TIM4->CNT = PWM_PULSE + 2;
+}
+
+void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2)
+{
+	*part1 = val >> 8;
+	*part2 = val & LSBYTE;
+}
+
+void SendFlag(can_flag f)
+{
+	uint8_t i = 0;
+	for (i=0; i<8; i++) {
+		TxMessage.Data[i] = (uint8_t) f;
+	}	
+	CAN_SafeTransmit(&TxMessage);
+}
+
+uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len)
+{
+	// CAN frame length is 8 bytes
+	// we can put only 4 uint16_t array values to 1 CAN message
+	uint16_t i = 0;
+	uint16_t numberOfValuesTransmitted = 0;
+	for(i=0; i<4; i++) {
+		if (startIndex + i < len) {
+			Convert16to2_8(array[startIndex + i], &TxMessage.Data[2*i], &TxMessage.Data[2*i+1]);
+			numberOfValuesTransmitted++;
+		} else {
+			break;
+		}
+	}
+	CAN_SafeTransmit(&TxMessage);
+	return numberOfValuesTransmitted;
+}
+
+void SendArray(can_flag f, uint16_t *array, uint16_t len)
+{
+	uint16_t nextFragmentIndex = 0;
+	SendFlag(f);
+	while (nextFragmentIndex < len) {
+		nextFragmentIndex = SendArrayFragment(array, nextFragmentIndex, len);
+	}
+	SendFlag(FINISH);
+}
+
+void Wait4TransmissionComplete(uint8_t TransmitMailbox)
+{
+	uint8_t status;
+	uint32_t i = 0;
+  while((status != CAN_TxStatus_Ok) && (i != 0x000FFFFF))               
+  {
+    status = CAN_TransmitStatus(CANx, TransmitMailbox);
+    i++;
+  }
+}
+
+void CAN_SafeTransmit(CanTxMsg* TxMessage)
+{
+	uint8_t TransmitMailbox;
+	TransmitMailbox = CAN_Transmit(CANx, &TxMessage);
+	Wait4TransmissionComplete(TransmitMailbox);
+}
+
+void SendTimes()
+{
+	SendArray(TIME_START, times, sizeOfGlobalArrays);
+}
+
+void SendUSignal()
+{
+	SendArray(TIME_START, pulseValues, sizeOfGlobalArrays);
+}
+
+void SendCoordinates()
+{
+	SendArray(TIME_START, coordinates, sizeOfGlobalArrays);
 }
