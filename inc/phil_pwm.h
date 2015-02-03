@@ -53,9 +53,9 @@ void SendFlag(can_flag f);
 uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len);
 void SendArray(can_flag f, uint16_t *array, uint16_t len);
 
-void SendTimes();
-void SendUSignal();
-void SendCoordinates();
+void SendTimes(void);
+void SendUSignal(void);
+void SendCoordinates(void);
 
 void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2);
 void Wait4TransmissionComplete(uint8_t TransmitMailbox);

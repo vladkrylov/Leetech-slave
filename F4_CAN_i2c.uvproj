@@ -487,6 +487,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\phil_pid.c</FilePath>
             </File>
+            <File>
+              <FileName>traj_transmit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\traj_transmit.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

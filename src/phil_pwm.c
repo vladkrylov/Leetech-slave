@@ -33,10 +33,14 @@ void Delay(uint32_t delay)
 
 void SendCoordinate(uint16_t coordindate, uint8_t steps2mm)
 {
-	Convert16to2_8(coordindate, &TxMessage.Data[1], &TxMessage.Data[2]);
+	Convert16to2_8(coordindate, &TxMessage.Data[0], &TxMessage.Data[1]);
 //	TxMessage.Data[0] = coordindate >> 8;
 //	TxMessage.Data[1] = coordindate & LSBYTE;
 	TxMessage.Data[2] = steps2mm;
+	
+	TxMessage.Data[5] = SINGLE_COORDINALTE;
+	TxMessage.Data[6] = SINGLE_COORDINALTE;
+	TxMessage.Data[7] = SINGLE_COORDINALTE;
 	
 	CAN_SafeTransmit(&TxMessage);
 }
@@ -625,21 +629,21 @@ void Wait4TransmissionComplete(uint8_t TransmitMailbox)
 void CAN_SafeTransmit(CanTxMsg* TxMessage)
 {
 	uint8_t TransmitMailbox;
-	TransmitMailbox = CAN_Transmit(CANx, &TxMessage);
+	TransmitMailbox = CAN_Transmit(CANx, TxMessage);
 	Wait4TransmissionComplete(TransmitMailbox);
 }
 
-void SendTimes()
+void SendTimes(void)
 {
-	SendArray(TIME_START, times, sizeOfGlobalArrays);
+	SendArray(TIME, times, sizeOfGlobalArrays);
 }
 
-void SendUSignal()
+void SendUSignal(void)
 {
-	SendArray(TIME_START, pulseValues, sizeOfGlobalArrays);
+	SendArray(U_SIGNAL, pulseValues, sizeOfGlobalArrays);
 }
 
-void SendCoordinates()
+void SendCoordinates(void)
 {
-	SendArray(TIME_START, coordinates, sizeOfGlobalArrays);
+	SendArray(COOORDINATES, coordinates, sizeOfGlobalArrays);
 }
