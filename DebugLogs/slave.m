@@ -1,10 +1,10 @@
-function slave()
+function [coords, u, times] = slave(yamlFile)
 %% Function for debugging LEETECH motors moving
 
 %% Load the data
-yamlFile = 'Data.yaml';
-
-savePreviousData(yamlFile);
+if nargin < 1
+    yamlFile = 'Data.yaml';
+end
 
 [times, u, coords, dest, stopInd] = getData(yamlFile);
 len = length(coords);
@@ -17,24 +17,24 @@ times_inertion = times(stopInd+1:end);
 
 %% Plot the data
 % figure(1)
-figure('units','normalized','outerposition',[0 0 1 1])
-subplot(2,1,1)
-title('\bf Coordinate of motor')
-xlabel('t, ms')
-ylabel('Coordinate, \mum')
-hold on
-    plot(times_pulses, coords_pulses, 'bo-');
-    plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
-    plot(times_inertion, coords_inertion, 'g*');
-
-hold off
-
-subplot(2,1,2)
-
-plot(times, u, '.-');
-title('{\bfDriven signal - width of pulse} (1 unit = 0.025\mus)')
-xlabel('t, ms')
-ylabel('Driven signal, units')
+% figure('units','normalized','outerposition',[0 0 1 1])
+% subplot(2,1,1)
+% title('\bf Coordinate of motor')
+% xlabel('t, ms')
+% ylabel('Coordinate, \mum')
+% hold on
+%     plot(times_pulses, coords_pulses, 'bo-');
+%     plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
+%     plot(times_inertion, coords_inertion, 'g*');
+% 
+% hold off
+% 
+% subplot(2,1,2)
+% 
+% plot(times, u, '.-');
+% title('{\bfDriven signal - width of pulse} (1 unit = 0.025\mus)')
+% xlabel('t, ms')
+% ylabel('Driven signal, units')
 
 end
 
