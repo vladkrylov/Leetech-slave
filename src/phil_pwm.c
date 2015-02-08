@@ -464,7 +464,7 @@ uint8_t MotorStuck(uint16_t* coordArray,
 	uint8_t i;
 	uint8_t res = 1;
 	
-	if (coordArray[lastReceivedCoordinateIndex] == 0) return 0;
+	if (lastReceivedCoordinateIndex < numOfRepeats) return 0;
 	
 	for(i=0; i < numOfRepeats-1; i++) {
 		if (abs(coordArray[lastReceivedCoordinateIndex], 
@@ -581,7 +581,7 @@ void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2)
 void SendFlag(can_flag f)
 {
 	uint8_t i = 0;
-	for (i=0; i<8; i++) {
+	for (i=5; i<8; i++) {
 		TxMessage.Data[i] = (uint8_t) f;
 	}	
 	CAN_SafeTransmit(&TxMessage);
@@ -598,7 +598,8 @@ uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len)
 			Convert16to2_8(array[startIndex + i], &TxMessage.Data[2*i], &TxMessage.Data[2*i+1]);
 			numberOfValuesTransmitted++;
 		} else {
-			break;
+			TxMessage.Data[2*i] = 0;
+			TxMessage.Data[2*i+1] = 0;
 		}
 	}
 	CAN_SafeTransmit(&TxMessage);
@@ -608,9 +609,13 @@ uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len)
 void SendArray(can_flag f, uint16_t *array, uint16_t len)
 {
 	uint16_t nextFragmentIndex = 0;
+	uint16_t bytesSent = 0;
 	SendFlag(f);
 	while (nextFragmentIndex < len) {
-		nextFragmentIndex = SendArrayFragment(array, nextFragmentIndex, len);
+		bytesSent = SendArrayFragment(array, nextFragmentIndex, len);
+		if (bytesSent < 4) break;
+		else
+			nextFragmentIndex += bytesSent;
 	}
 	SendFlag(FINISH);
 }
@@ -635,15 +640,30 @@ void CAN_SafeTransmit(CanTxMsg* TxMessage)
 
 void SendTimes(void)
 {
-	SendArray(TIME, times, sizeOfGlobalArrays);
+	SendArray(TIME_START, times, sizeOfGlobalArrays);
 }
 
 void SendUSignal(void)
 {
-	SendArray(U_SIGNAL, pulseValues, sizeOfGlobalArrays);
+	SendArray(U_SIGNAL_START, pulseValues, sizeOfGlobalArrays);
 }
 
 void SendCoordinates(void)
 {
-	SendArray(COOORDINATES, coordinates, sizeOfGlobalArrays);
+	SendArray(COOORDINATES_START, coordinates, sizeOfGlobalArrays);
 }
+
+void SendTrajectory(void)
+{
+	SendTimes();
+	SendUSignal();
+	SendCoordinates();
+	SendFlag(TRAJECTORY_TRANSMITTED);
+}
+
+
+
+
+
+
+

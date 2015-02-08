@@ -197,12 +197,9 @@ void CAN1_RX0_IRQHandler(void)
 				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 500);
 				SendCoordinate(finalCoord, finalCoord / 4096);
 			
-				if (getTrajectory) {
-					SendTimes();
-					SendUSignal();
-					SendCoordinates();
-				}
-
+				if (getTrajectory)
+					SendTrajectory();
+				
 				break;
 			
 			case GET_COORDINATE:
