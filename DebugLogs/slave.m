@@ -23,7 +23,7 @@ times_inertion = times(stopInd+1:end);
 
 %% Plot the data
 if (plotOpt ~= 0)
-    figure(1)
+%     figure(1)
     figure('units','normalized','outerposition',[0 0 1 1])
     subplot(2,1,1)
     title('\bf Coordinate of motor')
@@ -65,7 +65,7 @@ function [t, u, x, destination, stopIndex] = getData(yaml)
     u = cell2mat(params.u);
     x = to_um( cell2mat(params.x) );
     
-    stopIndex = length(u(u ~= 0)) + 1;
+    stopIndex = length(u(u ~= 0));
     destination = x(end);
 end
 

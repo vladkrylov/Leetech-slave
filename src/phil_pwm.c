@@ -406,19 +406,18 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 				break;
 			}
 			
+						
 			pulseValues[i] = PWM_PULSE;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
 			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
-			if ((abs(coordinates[i], coordToSet) < precision) || 
-					((direction == FORWARD) && (coordinates[i] >= coordToSet)) ||
-					((direction == BACK) && (coordinates[i] <= coordToSet))
-				 ) {
+			if (abs(coordinates[i], coordToSet) < precision) {
 				PWM_stop();
 				break;
 			}
+
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -428,6 +427,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
+			pulseValues[i] = 0;
 			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
