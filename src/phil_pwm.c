@@ -31,12 +31,11 @@ void Delay(uint32_t delay)
 	for(i=0; i<delay; i++);
 }
 
-void SendCoordinate(uint16_t coordindate, uint8_t steps2mm)
+void SendCoordinate(uint16_t coordindate, action_performed_t act)
 {
 	Convert16to2_8(coordindate, &TxMessage.Data[0], &TxMessage.Data[1]);
-//	TxMessage.Data[0] = coordindate >> 8;
-//	TxMessage.Data[1] = coordindate & LSBYTE;
-	TxMessage.Data[2] = steps2mm;
+	
+	TxMessage.Data[4] = act;
 	
 	TxMessage.Data[5] = SINGLE_COORDINALTE;
 	TxMessage.Data[6] = SINGLE_COORDINALTE;
@@ -547,7 +546,7 @@ void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
 {
 	PWM_PULSE = pulseWidth;
   PWM_PERIODS[motorID] = pulsePeriod;
-} 
+}
 
 void UpdateTimersWidth(uint16_t pulseWidth)
 {

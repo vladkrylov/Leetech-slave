@@ -195,7 +195,7 @@ void CAN1_RX0_IRQHandler(void)
 				getTrajectory = RxMessage.Data[5];
 			
 				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 500);
-				SendCoordinate(finalCoord, finalCoord / 4096);
+				SendCoordinate(finalCoord, SET_OR_GET);
 			
 				if (getTrajectory)
 					SendTrajectory();
@@ -204,13 +204,12 @@ void CAN1_RX0_IRQHandler(void)
 			
 			case GET_COORDINATE:
 				finalCoord = GetMotorCoordinate(motorID) + steps2mm * 4096;
-				SendCoordinate(finalCoord, steps2mm);
-//				SendEncoderOutput(encoderOutput, steps2mm, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, SET_OR_GET);
 				break;
 			
 			case RESET_ONE:
 				finalCoord = Reset(motorID);
-				SendCoordinate(finalCoord, 0);
+				SendCoordinate(finalCoord, RESET_ORIGIN);
 				break;
 			
 			case RESET_ALL:

@@ -28,7 +28,7 @@ uint32_t GetCoordinateToSet(void);
 
 void Init_RxMes(CanRxMsg *RxMessage);
 
-void SendCoordinate(uint16_t coordindate, uint8_t steps2mm);
+void SendCoordinate(uint16_t coordindate, action_performed_t act);
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length);
 void SendArray8Bytes(uint8_t* data);
 

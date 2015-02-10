@@ -19,6 +19,7 @@ typedef enum {SINGLE_COORDINALTE = 8,
 							TRAJECTORY_TRANSMITTED,
 							UNKNOWN
 						} can_flag;
+typedef enum {SET_OR_GET, RESET_ORIGIN} action_performed_t;
 
 commands_t WhatToDo(uint8_t symbol);
 
