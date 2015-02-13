@@ -24,21 +24,24 @@ times_inertion = times(stopInd+1:end);
 %% Plot the data
 if (plotOpt ~= 0)
     figure(1)
-    figure('units','normalized','outerposition',[0 0 1 1])
+    
+%     figure('units','normalized','outerposition',[0 0 1 1])
     subplot(2,1,1)
     title('\bf Coordinate of motor')
     xlabel('t, ms')
     ylabel('Coordinate, \mum')
+
+    plot(times_pulses, coords_pulses, 'bo-');
     hold on
-        plot(times_pulses, coords_pulses, 'bo-');
-        plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
-        plot(times_inertion, coords_inertion, 'g*');
+    plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
+    plot(times_inertion, coords_inertion, 'g*');
+    grid on
 
-    hold off
-
+    hold on
     subplot(2,1,2)
 
     plot(times, u, '.-');
+    grid on
     title('{\bfDriven signal - width of pulse} (1 unit = 0.025\mus)')
     xlabel('t, ms')
     ylabel('Driven signal, units')
@@ -65,7 +68,7 @@ function [t, u, x, destination, stopIndex] = getData(yaml)
     u = cell2mat(params.u);
     x = to_um( cell2mat(params.x) );
     
-    stopIndex = length(u(u ~= 0)) + 1;
+    stopIndex = length(u(u ~= 0));
     destination = x(end);
 end
 
@@ -80,5 +83,4 @@ function savePreviousData(yaml)
     mkdir(motorFolder);
     copyfile(yaml, [motorFolder, '/', dataFileName]);
 end
-
 

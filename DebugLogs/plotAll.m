@@ -1,4 +1,4 @@
-folder = 'D:\TBONE\Arm\Qt_interfase\build-one_motor_raw_ss-Desktop_Qt_5_2_1_MinGW_32bit-Debug\';
+folder = '/home/vlad/Leetech/build-one_motor_raw_ss-Desktop_Qt_5_4_0_GCC_64bit-Debug/';
 listing = dir(fullfile(folder,'*.yaml'));
 L = length(listing);
 ord = 2;

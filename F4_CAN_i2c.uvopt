@@ -150,7 +150,11 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+<<<<<<< Updated upstream
           <LineNumber>386</LineNumber>
+=======
+          <LineNumber>418</LineNumber>
+>>>>>>> Stashed changes
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -160,6 +164,7 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>D:\Leetech\Slave\src\phil_pwm.c</Filename>
+<<<<<<< Updated upstream
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -192,6 +197,8 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>D:\Leetech\Slave\src\phil_pwm.c</Filename>
+=======
+>>>>>>> Stashed changes
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -227,7 +234,7 @@
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>\\F4_CAN\src/phil_pwm.c\times</ItemText>
+          <ItemText>\\F4_CAN\src/phil_pwm.c\times,0x10</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
@@ -237,7 +244,7 @@
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>\\F4_CAN\src/phil_pwm.c\pulseValues</ItemText>
+          <ItemText>\\F4_CAN\src/phil_pwm.c\pulseValues,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
@@ -335,8 +342,13 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< Updated upstream
       <TopLine>27</TopLine>
       <CurrentLine>54</CurrentLine>
+=======
+      <TopLine>1</TopLine>
+      <CurrentLine>30</CurrentLine>
+>>>>>>> Stashed changes
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -381,10 +393,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< Updated upstream
       <ColumnNumber>14</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>183</TopLine>
       <CurrentLine>209</CurrentLine>
+=======
+      <ColumnNumber>67</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>175</TopLine>
+      <CurrentLine>206</CurrentLine>
+>>>>>>> Stashed changes
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -431,8 +450,13 @@
       <Focus>0</Focus>
       <ColumnNumber>6</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
+<<<<<<< Updated upstream
       <TopLine>132</TopLine>
       <CurrentLine>438</CurrentLine>
+=======
+      <TopLine>389</TopLine>
+      <CurrentLine>415</CurrentLine>
+>>>>>>> Stashed changes
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pwm.c</PathWithFileName>
       <FilenameWithoutPath>phil_pwm.c</FilenameWithoutPath>
@@ -509,10 +533,14 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< Updated upstream
       <ColumnNumber>30</ColumnNumber>
+=======
+      <ColumnNumber>0</ColumnNumber>
+>>>>>>> Stashed changes
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>84</TopLine>
-      <CurrentLine>85</CurrentLine>
+      <TopLine>200</TopLine>
+      <CurrentLine>225</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_i2c.c</PathWithFileName>
       <FilenameWithoutPath>phil_i2c.c</FilenameWithoutPath>
@@ -573,10 +601,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< Updated upstream
       <ColumnNumber>17</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1</TopLine>
       <CurrentLine>2</CurrentLine>
+=======
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>1</TopLine>
+      <CurrentLine>1</CurrentLine>
+>>>>>>> Stashed changes
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pid.c</PathWithFileName>
       <FilenameWithoutPath>phil_pid.c</FilenameWithoutPath>
