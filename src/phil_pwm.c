@@ -427,7 +427,9 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 			
 			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
-			if (abs(coordinates[i], coordToSet) < precision) {
+			if ((abs(coordinates[i], coordToSet) < precision) || 
+					(coordinates[i] > coordToSet))
+			{
 				PWM_stop();
 				break;
 			}
