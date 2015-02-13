@@ -18,6 +18,7 @@ void PWM_start(uint8_t motorID);
 void PWM_stop(void);
 void PWM_Run(uint8_t motorID, uint32_t duration);
 
+void ClearGlobalArrays(void);
 uint16_t PrevInd(uint16_t i);
 uint16_t PrevIndN(uint16_t i, uint16_t n);
 
@@ -53,9 +54,9 @@ void SendFlag(can_flag f);
 uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len);
 void SendArray(can_flag f, uint16_t *array, uint16_t len);
 
-void SendTimes(void);
-void SendUSignal(void);
-void SendCoordinates(void);
+void SendTimes(uint16_t len);
+void SendUSignal(uint16_t len);
+void SendCoordinates(uint16_t len);
 void SendTrajectory(void);
 
 void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2);

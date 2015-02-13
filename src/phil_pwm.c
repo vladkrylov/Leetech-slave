@@ -12,11 +12,13 @@ static uint16_t PWM_PERIOD = 260;
 static uint16_t PWM_PULSE = 120;
 
 static uint16_t coordinateToSet = 0;
-const uint16_t sizeOfGlobalArrays = 200;
+const uint16_t sizeOfGlobalArrays = 1000;
 
 uint16_t pulseValues[sizeOfGlobalArrays] = {0};
 uint16_t coordinates[sizeOfGlobalArrays] = {0};
 uint16_t times[sizeOfGlobalArrays] = {0};
+
+static uint16_t lengthOfTrajectory = 0;
 
 SPid pid;
 
@@ -75,6 +77,17 @@ void SendArray8Bytes(uint8_t* data)
 		TxMessage.Data[i] = data[i];
 	}
 	CAN_Transmit(CANx, &TxMessage);
+}
+
+void ClearGlobalArrays(void)
+{
+	uint16_t i;
+	for(i=0; i<sizeOfGlobalArrays; i++) {
+		times[i] = 0;
+		coordinates[i] = 0;
+		pulseValues[i] = 0;
+	}
+	lengthOfTrajectory = 0;
 }
 
 void CAN_Config(void)
@@ -386,6 +399,8 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 
 	uint16_t i = 1;
 	uint16_t stopInd = 0;
+	
+	ClearGlobalArrays();
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
@@ -431,6 +446,8 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
 		}
+		
+		lengthOfTrajectory = i+1;
 		
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
 		TIM5->CNT = 0;
@@ -489,8 +506,9 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 uint16_t Reset(uint8_t motorID)
 {
 	uint16_t origin = UINT16_MAX;
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
 	uint32_t i = 1;
+	
+	ClearGlobalArrays();
 	
 	SetDirection(motorID, BACK);
 	coordinates[0] = GetMotorCoordinate(motorID);
@@ -637,26 +655,28 @@ void CAN_SafeTransmit(CanTxMsg* TxMessage)
 	Wait4TransmissionComplete(TransmitMailbox);
 }
 
-void SendTimes(void)
+void SendTimes(uint16_t len)
 {
-	SendArray(TIME_START, times, sizeOfGlobalArrays);
+	SendArray(TIME_START, times, len);
 }
 
-void SendUSignal(void)
+void SendUSignal(uint16_t len)
 {
-	SendArray(U_SIGNAL_START, pulseValues, sizeOfGlobalArrays);
+	SendArray(U_SIGNAL_START, pulseValues, len);
 }
 
-void SendCoordinates(void)
+void SendCoordinates(uint16_t len)
 {
-	SendArray(COOORDINATES_START, coordinates, sizeOfGlobalArrays);
+	SendArray(COOORDINATES_START, coordinates, len);
 }
 
 void SendTrajectory(void)
 {
-	SendTimes();
-	SendUSignal();
-	SendCoordinates();
+//	uint16_t len = lengthOfTrajectory;
+	uint16_t len = sizeOfGlobalArrays;
+	SendTimes(len);
+	SendUSignal(len);
+	SendCoordinates(len);
 	SendFlag(TRAJECTORY_TRANSMITTED);
 }
 
