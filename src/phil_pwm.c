@@ -401,6 +401,8 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 	uint16_t stopInd = 0;
 	
 	ClearGlobalArrays();
+	UpdateTimersWidth(PWM_PULSE);
+	InitPID(&pid);
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
@@ -434,6 +436,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 				break;
 			}
 
+			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -513,6 +516,7 @@ uint16_t Reset(uint8_t motorID)
 	ClearGlobalArrays();
 	
 	SetDirection(motorID, BACK);
+	UpdateTimersWidth(PWM_PULSE);
 	coordinates[0] = GetMotorCoordinate(motorID);
 	
 	PWM_start(motorID);
@@ -570,10 +574,8 @@ void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
 
 void UpdateTimersWidth(uint16_t pulseWidth)
 {
-	PWM_PULSE = pulseWidth;
-
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
+	TIM3->CCR1 = pulseWidth;
+	TIM4->CCR4 = pulseWidth;
 }
 
 // This function must be called before any movings on motor applied
