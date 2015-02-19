@@ -7,7 +7,7 @@
 
 const uint8_t N_MOTORS = 4;
 
-static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
+static uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 260, 260};
 static uint16_t PWM_PERIOD = 260;
 static uint16_t PWM_PULSE = 120;
 
@@ -20,6 +20,14 @@ uint16_t times[sizeOfGlobalArrays] = {0};
 
 static uint16_t lengthOfTrajectory = 0;
 
+// order: Kp, Ki, Kd
+// three coefficients per one motor
+double PIDSettings[N_MOTORS][3] =  {
+	{0, 1, 2} ,
+	{4, 5, 6} ,
+	{8, 9, 10},
+	{8, 9, 10}
+};
 SPid pid;
 
 CAN_InitTypeDef        CAN_InitStructure;

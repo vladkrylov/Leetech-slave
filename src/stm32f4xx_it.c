@@ -43,15 +43,9 @@
   * @{
   */ 
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+const uint32_t thisSlaveCANstdID = 803;
 CanRxMsg RxMessage;
 extern uint8_t ubKeyNumber;
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
@@ -181,7 +175,7 @@ void CAN1_RX0_IRQHandler(void)
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
-  if ((RxMessage.StdId == 0x321)&&(RxMessage.IDE == CAN_ID_STD)) {
+  if ((RxMessage.StdId == thisSlaveCANstdID)&&(RxMessage.IDE == CAN_ID_STD)) {
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
 		action = RxMessage.Data[3];

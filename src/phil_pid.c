@@ -38,7 +38,7 @@ uint16_t UpdatePID(SPid* pid, int coord, int destination)
 //			pid->pKGain = 1.;
 //		}
 //	}
-  pTerm = (int)((pid->pGain * error) + 0.0);    // calculate the proportional term
+  pTerm = (int)(pid->pGain * error);    // calculate the proportional term
 	
 	pid->iState += error;          					 		// calculate the integral state with appropriate limiting
 	if (pid->iState > pid->iMax) 
