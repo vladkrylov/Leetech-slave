@@ -96,22 +96,22 @@ call(['cp', pid_filename, temp_pid_filename])
 with open(pid_filename, 'r') as pid_file:
     content = pid_file.read()
 
-pid_pattern_base = "static double PIDSettings[N_MOTORS][3] =  {"
-pid_pattern = r"static double PIDSettings\[N_MOTORS\]\[3\] =  \{.*};"
+pid_pattern_base = "static double PIDSettings[N_MOTORS][3] = {"
+pid_pattern = r'static double PIDSettings\[N_MOTORS\]\[3\] = \{.*\};'
 
 substitution_dict = {'pattern': pid_pattern_base,
                      'motor1': ', '.join(map(str,[Kp[0], Ki[0], Kd[0]])),
                      'motor2': ', '.join(map(str,[Kp[1], Ki[1], Kd[1]])),
 					 'motor3': ', '.join(map(str,[Kp[2], Ki[2], Kd[2]])),
 					 'motor4': ', '.join(map(str,[Kp[3], Ki[3], Kd[3]]))}
-subs = """%(pattern)s\n
+subs = """%(pattern)s
 {%(motor1)s},
 {%(motor2)s},
 {%(motor3)s},
 {%(motor4)s}
 };""" % substitution_dict
 
-subs = 'x'
+# subs = 'x'
 
 content = re.sub(pid_pattern, subs, content, flags=re.DOTALL | re.MULTILINE)
 with open(temp_pid_filename, 'w') as tmp_file:

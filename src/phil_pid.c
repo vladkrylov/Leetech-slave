@@ -1,7 +1,7 @@
 #include "phil_pid.h"
 #include "phil_i2c.h"
 
-void InitPID(SPid* s)
+void InitPID(SPid* s, double Kp, double Ki, double Kd)
 {
 	s->numOfPoints = 0;
 	

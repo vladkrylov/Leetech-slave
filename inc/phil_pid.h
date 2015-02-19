@@ -20,7 +20,7 @@ typedef struct
 	int maxOutputLimit;
 } SPid;
 
-void InitPID(SPid* s);
+void InitPID(SPid* s, double Kp, double Ki, double Kd);
 uint16_t UpdatePID(SPid* pid, int coord, int destination);
 
 #endif /* __PHIL_PID_H */
