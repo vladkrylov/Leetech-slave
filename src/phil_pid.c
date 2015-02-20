@@ -8,9 +8,9 @@ void InitPID(SPid* s, double Kp, double Ki, double Kd)
 	s->iState = 0;
 	s->dState = 0;
 	
-	s->pGain = 0.02;
-	s->iGain = 1.45e-5;
-	s->dGain = 0.01;
+	s->pGain = Kp;
+	s->iGain = Ki;
+	s->dGain = Kd;
 	
 	s->pKGain = 1.;
 	s->Kpk = 0.0;

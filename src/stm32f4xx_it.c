@@ -43,7 +43,7 @@
   * @{
   */ 
 
-const uint32_t thisSlaveCANstdID = 801;
+const uint32_t thisSlaveCANstdID = 802;
 CanRxMsg RxMessage;
 extern uint8_t ubKeyNumber;
 

@@ -11,20 +11,20 @@ def construct_slave_settings(CAN_id, periods, Kp, Ki, Kd):
 				
 # Set the dictionary with settings for each slave
 settings = {"Entrance": construct_slave_settings(CAN_id=801, 
-                                                 periods=[260, 248, 251, 251], 
-												 Kp=[2e-2, 2e-2, 2e-2, 2e-2], 
-												 Ki=[1.45e-5, 1.45e-5, 1.45e-5, 1.45e-5], 
-												 Kd=[1e-1, 1e-1, 1e-1, 1e-1]),
+                                                 periods=[256, 262, 251, 251], 
+												 Kp=[0.02, 0.01, 0.025, 0.036], 
+												 Ki=[1.45e-5, 1.7e-5, 5.18e-5, 1.45e-5], 
+												 Kd=[0.01, 0.01, 0.01, 0.01]),
 			"Exit2": construct_slave_settings(CAN_id=803, 
                                                  periods=[260, 260, 260, 260], 
 												 Kp=[0, 0, 0, 0], 
 												 Ki=[0, 0, 0, 0], 
 												 Kd=[0, 0, 0, 0]),
 			"Exit1": construct_slave_settings(CAN_id=802, 
-                                                 periods=[256, 262, 251, 251], 
+                                                 periods=[260, 248, 251, 251], 
 												 Kp=[2e-2, 2e-2, 2e-2, 2e-2], 
 												 Ki=[1.45e-5, 1.45e-5, 1.45e-5, 1.45e-5], 
-												 Kd=[1e-1, 1e-1, 1e-1, 1e-1]),
+												 Kd=[0.01, 0.01, 0.01, 0.01]),
            }
 		   
 current_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))

@@ -23,10 +23,10 @@ static uint16_t lengthOfTrajectory = 0;
 // order: Kp, Ki, Kd
 // three coefficients per one motor
 static double PIDSettings[N_MOTORS][3] = {
-{0.02, 1.45e-05, 0.1},
-{0.02, 1.45e-05, 0.1},
-{0.02, 1.45e-05, 0.1},
-{0.02, 1.45e-05, 0.1}
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01}
 };
 SPid pid;
 
