@@ -7,14 +7,27 @@
 
 const uint8_t N_MOTORS = 4;
 
-uint16_t PWM_PERIODS[N_MOTORS] = {260, 260, 255, 255};
-uint16_t PWM_PERIOD = 260;
-uint16_t PWM_PULSE = 120;
+static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
+static uint16_t PWM_PERIOD = 260;
+static uint16_t PWM_PULSE = 120;
 
-uint16_t coordinateToSet = 0;
-const uint8_t sizeOfGlobalArrays = 200;
-//#define sizeOfGlobalArrays 100
+static uint16_t coordinateToSet = 0;
+const uint16_t sizeOfGlobalArrays = 1000;
 
+uint16_t pulseValues[sizeOfGlobalArrays] = {0};
+uint16_t coordinates[sizeOfGlobalArrays] = {0};
+uint16_t times[sizeOfGlobalArrays] = {0};
+
+static uint16_t lengthOfTrajectory = 0;
+
+// order: Kp, Ki, Kd
+// three coefficients per one motor
+static double PIDSettings[N_MOTORS][3] = {
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01}
+};
 SPid pid;
 
 CAN_InitTypeDef        CAN_InitStructure;
@@ -28,13 +41,17 @@ void Delay(uint32_t delay)
 	for(i=0; i<delay; i++);
 }
 
-void SendCoordinate(uint16_t coordindate, uint8_t steps2mm)
+void SendCoordinate(uint16_t coordindate, action_performed_t act)
 {
-	TxMessage.Data[0] = coordindate >> 8;
-	TxMessage.Data[1] = coordindate & LSBYTE;
-	TxMessage.Data[2] = steps2mm;
+	Convert16to2_8(coordindate, &TxMessage.Data[0], &TxMessage.Data[1]);
 	
-	CAN_Transmit(CANx, &TxMessage);
+	TxMessage.Data[4] = act;
+	
+	TxMessage.Data[5] = SINGLE_COORDINALTE;
+	TxMessage.Data[6] = SINGLE_COORDINALTE;
+	TxMessage.Data[7] = SINGLE_COORDINALTE;
+	
+	CAN_SafeTransmit(&TxMessage);
 }
 
 void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
@@ -68,6 +85,17 @@ void SendArray8Bytes(uint8_t* data)
 		TxMessage.Data[i] = data[i];
 	}
 	CAN_Transmit(CANx, &TxMessage);
+}
+
+void ClearGlobalArrays(void)
+{
+	uint16_t i;
+	for(i=0; i<sizeOfGlobalArrays; i++) {
+		times[i] = 0;
+		coordinates[i] = 0;
+		pulseValues[i] = 0;
+	}
+	lengthOfTrajectory = 0;
 }
 
 void CAN_Config(void)
@@ -190,36 +218,6 @@ void Init_RxMes(CanRxMsg *RxMessage)
   {
     RxMessage->Data[ubCounter] = 0x00;
   }
-}
-
-// motorID = 1...N_MOTORS
-void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
-{
-	PWM_PULSE = pulseWidth;
-  PWM_PERIODS[motorID-1] = pulsePeriod;
-}
-
-void UpdateTimersWidth(uint16_t pulseWidth)
-{
-	PWM_PULSE = pulseWidth;
-
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
-}
-
-// This function must be called before any movings on motor applied
-// motorID = 1...N_MOTORS
-void ApplyMotorSettings(uint8_t motorID)
-{
-	PWM_PERIOD = PWM_PERIODS[motorID-1];
-	
-	TIM3->CCR1 = PWM_PULSE;
-	TIM4->CCR4 = PWM_PULSE;
-	TIM3->ARR = PWM_PERIOD;
-	TIM4->ARR = PWM_PERIOD;
-
-	TIM3->CNT = PWM_PULSE + 2;
-	TIM4->CNT = PWM_PULSE + 2;
 }
 
 void TIM_Config(void)
@@ -391,13 +389,6 @@ uint32_t GetCoordinateToSet(void)
 	return coordinateToSet;
 }
 
-void Move1Unit(uint8_t motorID, direction_t direction)
-{
-	SetDirection(motorID, direction);
-	Delay(500000);
-	PWM_Run(motorID, 500000);
-}
-
 direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 {
 	direction_t direction;
@@ -409,98 +400,21 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 	return direction;
 }
 
-uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm)
-{
-	uint16_t coord;
-	direction_t direction;
-	direction_t oldDirection;
-
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
-//	uint32_t pulses[sizeOfGlobalArrays] = {0};
-
-	uint8_t i = 1;
-	uint8_t stopInd = 0;
-
-	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	times[0] = 0;
-//	pulses[0] = PulsesToSend[motorID-1][direction];
-
-	if (abs(coordinates[0], coordToSet) > 300) {
-		InitPID(&pid);
-		direction = DetermDirection(coordToSet, coordinates[0]);
-		
-		SetDirection(motorID, direction);
-		
-		TIM5->CNT = 0;
-		TIM5->CR1 |= TIM_CR1_CEN;
-		PWM_start(motorID);
-
-		while(1) {			
-			if (MotorStuck(coordinates, PrevInd(i), 20)) {
-				PWM_stop();
-				break;
-			}
-			
-			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-			times[i] = TIM5->CNT;
-			
-			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
-			
-//			if (MotorStop(coordinates[i], coordToSet, coarseBalanceMax)) break;
-			
-//			PWM_stop();
-			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
-//			PWM_start();
-			
-			oldDirection = direction;
-			direction = DetermDirection(coordToSet, coordinates[i]);
-			if (oldDirection != direction) {
-				PWM_stop();
-				break;
-//				SetDirection(motorID, direction);
-//				PWM_start();
-			}
-			
-			i++; i %= sizeOfGlobalArrays;
-		}
-
-		stopInd = i;
-		
-		while(1) {
-			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
-			times[i] = TIM5->CNT;
-			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
-			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
-			i++; i %= sizeOfGlobalArrays;
-		}
-		
-		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
-		TIM5->CNT = 0;
-		UpdateTimers(motorID, pid.maxOutputLimit, PWM_PERIOD);
-	}
-	// Wait till motor stop moving due to inertion
-	Delay(2000000);
-	// And receive its coordinate
-	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
-		
-	return coord;
-}
-
 uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
 	direction_t direction;
 
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
-	uint16_t times[sizeOfGlobalArrays] = {0};
-
-	uint8_t i = 1;
-	uint8_t stopInd = 0;
+	uint16_t i = 1;
+	uint16_t stopInd = 0;
+	
+	ClearGlobalArrays();
+	UpdateTimersWidth(PWM_PULSE);
+	InitPID(&pid, PIDSettings[motorID-1][0], PIDSettings[motorID-1][1], PIDSettings[motorID-1][2]);
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
+	pulseValues[0] = PWM_PULSE;
 
 	if (abs(coordinates[0], coordToSet) > precision) {
 		direction = DetermDirection(coordToSet, coordinates[0]);
@@ -516,18 +430,21 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 				break;
 			}
 			
+						
+			pulseValues[i] = PWM_PULSE;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
-			Check4OverStep2mm(direction, coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
+			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
 			if ((abs(coordinates[i], coordToSet) < precision) || 
-					((direction == FORWARD) && (coordinates[i] >= coordToSet)) ||
-					((direction == BACK) && (coordinates[i] <= coordToSet))
-				 ) {
+					(coordinates[i] > coordToSet))
+			{
 				PWM_stop();
 				break;
 			}
+
+			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -537,45 +454,46 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
-			Check4OverStep2mm(direction, coordinates[i-1], &coordinates[i], &steps2mm);
+			pulseValues[i] = 0;
+			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			if (MotorStuck(coordinates, PrevInd(i), 5)) break;
 			i++; i %= sizeOfGlobalArrays;
 		}
+		
+		lengthOfTrajectory = i+1;
 		
 		TIM5->CR1 &= (uint16_t)~TIM_CR1_CEN;
 		TIM5->CNT = 0;
 	}
 
 	coord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-	Check4OverStep2mm(direction, coordinates[i-1], &coord, &steps2mm);
+	Check4OverStep2mm(coordinates[PrevInd(i)], &coord, &steps2mm);
 		
 	return coord;
 }
 
-void Check4OverStep2mm(direction_t direction, uint16_t lastCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
+void Check4OverStep2mm(uint16_t prevCoord, uint16_t* nextCoordptr, uint8_t* steps2mm)
 {
 	uint16_t nextCoord = *nextCoordptr;
-	
-	if (direction == FORWARD) {
-		if (lastCoord > nextCoord + 2048) {
-			*steps2mm += 1;
-			nextCoord += 4096;
-		}
-	} else {
-		if ((lastCoord < nextCoord) && abs(lastCoord, nextCoord) > 2048) {
-			*steps2mm -= 1;
-			nextCoord -= 4096;
-		}
+	if (prevCoord > nextCoord + 2048) {
+		*steps2mm += 1;
+		nextCoord += 4096;
+	}
+	else if ((prevCoord < nextCoord) && abs(prevCoord, nextCoord) > 2048) {
+		*steps2mm -= 1;
+		nextCoord -= 4096;
 	}
 	*nextCoordptr = nextCoord;
 }
 
 uint8_t MotorStuck(uint16_t* coordArray, 
-									 uint8_t lastReceivedCoordinateIndex,
+									 uint16_t lastReceivedCoordinateIndex,
 									 uint8_t numOfRepeats)
 {
 	uint8_t i;
 	uint8_t res = 1;
+	
+	if (lastReceivedCoordinateIndex < numOfRepeats) return 0;
 	
 	for(i=0; i < numOfRepeats-1; i++) {
 		if (abs(coordArray[lastReceivedCoordinateIndex], 
@@ -601,10 +519,12 @@ uint8_t MotorStop(uint16_t coord, uint16_t coordToSet, uint16_t presicion)
 uint16_t Reset(uint8_t motorID)
 {
 	uint16_t origin = UINT16_MAX;
-	uint16_t coordinates[sizeOfGlobalArrays] = {0};
 	uint32_t i = 1;
 	
+	ClearGlobalArrays();
+	
 	SetDirection(motorID, BACK);
+	UpdateTimersWidth(PWM_PULSE);
 	coordinates[0] = GetMotorCoordinate(motorID);
 	
 	PWM_start(motorID);
@@ -624,14 +544,17 @@ uint16_t Reset(uint8_t motorID)
 void Test(uint8_t motorID)
 {
 	uint8_t i = 0;
+	uint32_t moveTime = 10000000;
 	
 	UpdateTimers(motorID, PWM_PERIOD/2 - 5, PWM_PERIOD);
-	for(i=0; i<2; i++) {
+	for(i=0; i<1; i++) {
 		SetDirection(motorID, FORWARD);
-		PWM_Run(motorID, 5000000);
+		PWM_Run(motorID, moveTime);
+		Delay(moveTime/10);
 		
 		SetDirection(motorID, BACK);
-		PWM_Run(motorID, 5000000);
+		PWM_Run(motorID, moveTime);
+		Delay(moveTime/10);
 	}
 }
 
@@ -640,12 +563,138 @@ void TestPulsesForOscilloscope()
 		PWM_Run(1, 100000000);
 }
 
-uint8_t PrevInd(uint8_t i) 
+uint16_t PrevInd(uint16_t i) 
 {
 	return PrevIndN(i, 1);
 }
 
-uint8_t PrevIndN(uint8_t i, uint8_t n) 
+uint16_t PrevIndN(uint16_t i, uint16_t n) 
 {
-	return (sizeOfGlobalArrays + i-n) % sizeOfGlobalArrays;
+	return (sizeOfGlobalArrays + i - n) % sizeOfGlobalArrays;
 }
+
+// motorID = 0...N_MOTORS-1
+void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod)
+{
+	PWM_PULSE = pulseWidth;
+  PWM_PERIODS[motorID] = pulsePeriod;
+}
+
+void UpdateTimersWidth(uint16_t pulseWidth)
+{
+	TIM3->CCR1 = pulseWidth;
+	TIM4->CCR4 = pulseWidth;
+}
+
+// This function must be called before any movings on motor applied
+// motorID = 1...N_MOTORS
+void ApplyMotorSettings(uint8_t motorID)
+{
+	PWM_PERIOD = PWM_PERIODS[motorID-1];
+	
+	TIM3->CCR1 = PWM_PULSE;
+	TIM4->CCR4 = PWM_PULSE;
+	TIM3->ARR = PWM_PERIOD;
+	TIM4->ARR = PWM_PERIOD;
+
+	TIM3->CNT = PWM_PULSE + 2;
+	TIM4->CNT = PWM_PULSE + 2;
+}
+
+void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2)
+{
+	*part1 = val >> 8;
+	*part2 = val & LSBYTE;
+}
+
+void SendFlag(can_flag f)
+{
+	uint8_t i = 0;
+	for (i=5; i<8; i++) {
+		TxMessage.Data[i] = (uint8_t) f;
+	}	
+	CAN_SafeTransmit(&TxMessage);
+}
+
+uint16_t SendArrayFragment(uint16_t *array, uint16_t startIndex, uint16_t len)
+{
+	// CAN frame length is 8 bytes
+	// we can put only 4 uint16_t array values to 1 CAN message
+	uint16_t i = 0;
+	uint16_t numberOfValuesTransmitted = 0;
+	for(i=0; i<4; i++) {
+		if (startIndex + i < len) {
+			Convert16to2_8(array[startIndex + i], &TxMessage.Data[2*i], &TxMessage.Data[2*i+1]);
+			numberOfValuesTransmitted++;
+		} else {
+			TxMessage.Data[2*i] = 0;
+			TxMessage.Data[2*i+1] = 0;
+		}
+	}
+	CAN_SafeTransmit(&TxMessage);
+	return numberOfValuesTransmitted;
+}
+
+void SendArray(can_flag f, uint16_t *array, uint16_t len)
+{
+	uint16_t nextFragmentIndex = 0;
+	uint16_t bytesSent = 0;
+	SendFlag(f);
+	while (nextFragmentIndex < len) {
+		bytesSent = SendArrayFragment(array, nextFragmentIndex, len);
+		if (bytesSent < 4) break;
+		else
+			nextFragmentIndex += bytesSent;
+	}
+	SendFlag(FINISH);
+}
+
+void Wait4TransmissionComplete(uint8_t TransmitMailbox)
+{
+	uint8_t status;
+	uint32_t i = 0;
+  while((status != CAN_TxStatus_Ok) && (i != 0x000FFFFF))               
+  {
+    status = CAN_TransmitStatus(CANx, TransmitMailbox);
+    i++;
+  }
+}
+
+void CAN_SafeTransmit(CanTxMsg* TxMessage)
+{
+	uint8_t TransmitMailbox;
+	TransmitMailbox = CAN_Transmit(CANx, TxMessage);
+	Wait4TransmissionComplete(TransmitMailbox);
+}
+
+void SendTimes(uint16_t len)
+{
+	SendArray(TIME_START, times, len);
+}
+
+void SendUSignal(uint16_t len)
+{
+	SendArray(U_SIGNAL_START, pulseValues, len);
+}
+
+void SendCoordinates(uint16_t len)
+{
+	SendArray(COOORDINATES_START, coordinates, len);
+}
+
+void SendTrajectory(void)
+{
+//	uint16_t len = lengthOfTrajectory;
+	uint16_t len = sizeOfGlobalArrays;
+	SendTimes(len);
+	SendUSignal(len);
+	SendCoordinates(len);
+	SendFlag(TRAJECTORY_TRANSMITTED);
+}
+
+
+
+
+
+
+

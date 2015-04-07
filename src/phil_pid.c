@@ -1,22 +1,22 @@
 #include "phil_pid.h"
 #include "phil_i2c.h"
 
-void InitPID(SPid* s)
+void InitPID(SPid* s, double Kp, double Ki, double Kd)
 {
 	s->numOfPoints = 0;
 	
 	s->iState = 0;
 	s->dState = 0;
 	
-	s->pGain = 0.02;
-	s->iGain = 0.001;
-	s->dGain = 0.;
+	s->pGain = Kp;
+	s->iGain = Ki;
+	s->dGain = Kd;
 	
 	s->pKGain = 1.;
-	s->Kpk = 0.01;
+	s->Kpk = 0.0;
 	
 	s->iMin = 0;
-	s->iMax = 10000;
+	s->iMax = 1000000;
 	
 	s->minOutputLimit = 5;
 	s->maxOutputLimit = 120;
@@ -38,7 +38,7 @@ uint16_t UpdatePID(SPid* pid, int coord, int destination)
 //			pid->pKGain = 1.;
 //		}
 //	}
-  pTerm = (int)((pid->pGain * error) + 0.5);    // calculate the proportional term
+  pTerm = (int)(pid->pGain * error);    // calculate the proportional term
 	
 	pid->iState += error;          					 		// calculate the integral state with appropriate limiting
 	if (pid->iState > pid->iMax) 

@@ -1,16 +1,19 @@
-function slave()
-in = load('TimeCoords.log');
-params = ReadYaml('Params.yaml');
+function [coords, u, times] = slave(yamlFile, plotOpt)
+%% Function for debugging LEETECH motors moving
 
-dest = to_um(params.dest);
-final = to_um(params.final);
-stopInd = params.pulsesStopIndex;
+%% Load the data
+if nargin < 2
+    plotOpt =0;
+    if nargin < 1
+        yamlFile = 'Data.yaml';
+    end
+end
 
-coords = to_um( in(:,2) );
-len = length(coords);
-% times = [0 : 0.653 : 0.653*(len-1)];
-times = in(:,1) / 100;
-% disp( diff(times) );
+[times, u, coords, dest, stopInd] = getData(yamlFile);
+times = [times(1) times(times ~= 0)];
+len = length(times);
+u = u(1:len);
+coords = coords(1:len);
 
 coords_pulses = coords(1:stopInd);
 times_pulses = times(1:stopInd);
@@ -18,21 +21,28 @@ times_pulses = times(1:stopInd);
 coords_inertion = coords(stopInd+1:end);
 times_inertion = times(stopInd+1:end);
 
-figure(1)
-title('Time-Coordinate plot')
-xlabel('t, ms')
-ylabel('Coordinate, \mum')
-hold on
-    plot(times_pulses, coords_pulses, 'bo-');
-    plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
-    plot(times_inertion, coords_inertion, 'g*');
-    
-    % fitted plot
-    plot(times_pulses, fitmodel(times_pulses, coords_pulses, coords_pulses(1)), 'r.')
-hold off
+%% Plot the data
+if (plotOpt ~= 0)
+%     figure(1)
+    figure('units','normalized','outerposition',[0 0 1 1])
+    subplot(2,1,1)
+    title('\bf Coordinate of motor')
+    xlabel('t, ms')
+    ylabel('Coordinate, \mum')
+    hold on
+        plot(times_pulses, coords_pulses, 'bo-');
+        plot( linspace(min(times), max(times), len), dest*ones(len), 'r--');
+        plot(times_inertion, coords_inertion, 'g*');
 
-% PrintInertionData( (coords_pulses(end) - coords_pulses(end-1)) / (times(end) - times(end-1)) , ...
-%                             final - coords_pulses(end) );
+    hold off
+
+    subplot(2,1,2)
+
+    plot(times, u, '.-');
+    title('{\bfDriven signal - width of pulse} (1 unit = 0.025\mus)')
+    xlabel('t, ms')
+    ylabel('Driven signal, units')
+end
 
 end
 
@@ -40,22 +50,35 @@ function res = to_um (arg1)
     res = arg1 * 0.488;
 end
 
-function PrintInertionData(speed, deviation)
-    fileID = fopen('InertionData.txt', 'a');
-    fprintf ( fileID, '%f\t%f\n', speed, deviation );
-    fclose(fileID);
+function pulseWidthus = pulse2us(pulseWidth)
+    pulseWidthus = 0.025 * pulseWidth;
 end
 
-function res = fitmodel(t, x, x0)
-% x(1) = beta
-% x(2) = gamma
-F = @(pars,xdata) x0 + pars(1) * (xdata - 1/pars(2) * (1 - exp( -pars(2) * xdata) ));
-x_init = [1 1];
-[xfitted,resnorm,~,exitflag,output] = lsqcurvefit(F,x_init,t,x)
-res = F(xfitted, t);
+function [t, u, x, destination, stopIndex] = getData(yaml)
+    params = ReadYaml(yaml);
 
-% FittedCoeficientsFile = fopen('FittedCoeficients.txt','a');
-% fprintf(FittedCoeficientsFile,'%6.2f\t%6.4f\n', xfitted(1), xfitted(2));
-% fclose(FittedCoeficientsFile);
+%     destination = to_um(params.dest);
+%     stopIndex = params.pulsesStopIndex;
+    destination = 0;
 
+    t = cell2mat(params.t) / 100;
+    u = cell2mat(params.u);
+    x = to_um( cell2mat(params.x) );
+    
+    stopIndex = length(u(u ~= 0));
+    destination = x(end);
 end
+
+function savePreviousData(yaml)
+    params = ReadYaml(yaml);
+    u = cell2mat(params.u);
+    
+    motorFolder = [params.Set_id, 'Motor', num2str(params.Motor_id)];
+    dataFileName = ['U(0)=', num2str(u(1)),'_Dest=', num2str(params.dest),...
+                             '_StopAt=', num2str(params.pulsesStopIndex),...
+                             '.yaml'];
+    mkdir(motorFolder);
+    copyfile(yaml, [motorFolder, '/', dataFileName]);
+end
+
+

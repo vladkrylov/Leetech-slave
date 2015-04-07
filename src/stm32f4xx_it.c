@@ -43,15 +43,9 @@
   * @{
   */ 
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
+const uint32_t thisSlaveCANstdID = 802;
 CanRxMsg RxMessage;
 extern uint8_t ubKeyNumber;
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
@@ -177,10 +171,11 @@ void CAN1_RX0_IRQHandler(void)
 	uint8_t steps2mm;
 	uint16_t newPulseWidth;
 	uint16_t newPulsePeriod;
+	uint8_t getTrajectory = 0;
 	
   CAN_Receive(CAN1, CAN_FIFO0, &RxMessage);
   
-  if ((RxMessage.StdId == 0x322)&&(RxMessage.IDE == CAN_ID_STD)) {
+  if ((RxMessage.StdId == thisSlaveCANstdID)&&(RxMessage.IDE == CAN_ID_STD)) {
 		
 		GPIOE->ODR ^= GPIO_Pin_12;
 		action = RxMessage.Data[3];
@@ -191,21 +186,24 @@ void CAN1_RX0_IRQHandler(void)
 		switch (action) {
 			case MOVE:
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
+				getTrajectory = RxMessage.Data[5];
 			
-				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 500);
-				SendCoordinate(finalCoord, finalCoord / 4096);
-//				SendEncoderOutput(encoderOutput, finalCoord / 4096, NUMBER_OF_BITS_FROM_ENCODER);
+				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 0);
+				SendCoordinate(finalCoord, SET_OR_GET);
+			
+//				if (getTrajectory)
+//					SendTrajectory();
+				
 				break;
 			
 			case GET_COORDINATE:
 				finalCoord = GetMotorCoordinate(motorID) + steps2mm * 4096;
-				SendCoordinate(finalCoord, steps2mm);
-//				SendEncoderOutput(encoderOutput, steps2mm, NUMBER_OF_BITS_FROM_ENCODER);
+				SendCoordinate(finalCoord, SET_OR_GET);
 				break;
 			
 			case RESET_ONE:
 				finalCoord = Reset(motorID);
-				SendCoordinate(finalCoord, 0);
+				SendCoordinate(finalCoord, RESET_ORIGIN);
 				break;
 			
 			case RESET_ALL:
@@ -220,14 +218,17 @@ void CAN1_RX0_IRQHandler(void)
 				break;
 			
 			case TEST_OSCILLOSCOPE:
-				TestPulsesForOscilloscope();
+//				TestPulsesForOscilloscope();
 				break;
 			
 			case SET_PULSES:
-				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);;
-				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);;
+				newPulseWidth = RxMessage.Data[4] + (RxMessage.Data[5]<<8);
+				newPulsePeriod = RxMessage.Data[6] + (RxMessage.Data[7]<<8);
 			
 				UpdateTimers(motorID, newPulseWidth, newPulsePeriod);
+				break;
+			
+			case NOTHING:
 				break;
 		}
 	}
