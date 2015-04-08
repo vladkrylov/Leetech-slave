@@ -9,6 +9,7 @@ const uint8_t N_MOTORS = 4;
 
 static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
 static uint16_t PWM_PERIOD = 260;
+static uint16_t PWM_PULSE_MAX = 120;
 static uint16_t PWM_PULSE = 120;
 
 static uint16_t coordinateToSet = 0;
@@ -400,7 +401,7 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 	return direction;
 }
 
-uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
+uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
 	direction_t direction;
@@ -451,6 +452,7 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 
 		stopInd = i;
 		
+		// wait for inertion
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;

@@ -1,0 +1,10 @@
+Set_id: Entrance
+Motor_id: 1
+dest: 10240
+precision: 500
+pulsesStopIndex: 1
+t: [0, 57]
+u: [120, 0]
+x: [0, 0]
+
+
