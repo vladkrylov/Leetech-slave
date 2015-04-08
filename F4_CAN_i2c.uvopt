@@ -150,7 +150,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>678</LineNumber>
+          <LineNumber>422</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -166,7 +166,23 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>184</LineNumber>
+          <LineNumber>680</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>D:\Leetech\Slave\src\phil_pwm.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>198</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -309,7 +325,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>172</TopLine>
+      <TopLine>171</TopLine>
       <CurrentLine>182</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\startup_stm32f40xx.s</PathWithFileName>
@@ -349,8 +365,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>11</TopLine>
-      <CurrentLine>32</CurrentLine>
+      <TopLine>7</TopLine>
+      <CurrentLine>18</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -395,10 +411,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>27</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>175</TopLine>
+      <CurrentLine>198</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\stm32f4xx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f4xx_it.c</FilenameWithoutPath>
@@ -445,8 +461,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>69</TopLine>
+      <CurrentLine>422</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pwm.c</PathWithFileName>
       <FilenameWithoutPath>phil_pwm.c</FilenameWithoutPath>
@@ -525,7 +541,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>208</TopLine>
+      <TopLine>214</TopLine>
       <CurrentLine>225</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_i2c.c</PathWithFileName>
@@ -587,10 +603,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>5</ColumnNumber>
+      <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>40</CurrentLine>
+      <TopLine>19</TopLine>
+      <CurrentLine>17</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\phil_pid.c</PathWithFileName>
       <FilenameWithoutPath>phil_pid.c</FilenameWithoutPath>

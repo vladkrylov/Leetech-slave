@@ -34,8 +34,7 @@ void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length);
 void SendArray8Bytes(uint8_t* data);
 
 void Move1Unit(uint8_t motorID, direction_t direction);
-uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision);
-uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm);
+uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision);
 uint16_t Reset(uint8_t motorID);
 
 // Tests

@@ -24,6 +24,7 @@ times_inertion = times(stopInd+1:end);
 %% Plot the data
 if (plotOpt ~= 0)
 %     figure(1)
+    close all
     figure('units','normalized','outerposition',[0 0 1 1])
     subplot(2,1,1)
     title('\bf Coordinate of motor')

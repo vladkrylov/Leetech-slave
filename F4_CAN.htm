@@ -3,11 +3,11 @@
 <title>Static Call Graph - [.\F4_CAN.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\F4_CAN.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Fri Feb 20 19:14:41 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Apr 07 17:39:01 2015
 <BR><P>
-<H3>Maximum Stack Usage =        176 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        184 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-CAN1_RX0_IRQHandler &rArr; HotfixMove &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
+CAN1_RX0_IRQHandler &rArr; Move &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 <P>
 <H3>
 Functions with no stack information
@@ -530,7 +530,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphResetCmd
 </UL>
 
-<P><STRONG><a name="[90]"></a>GPIO_Init</STRONG> (Thumb, 144 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(.text))
+<P><STRONG><a name="[91]"></a>GPIO_Init</STRONG> (Thumb, 144 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART3_Init
@@ -553,7 +553,7 @@ Global Symbols
 
 <P><STRONG><a name="[119]"></a>GPIO_ReadOutputData</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text), UNUSED)
 
-<P><STRONG><a name="[91]"></a>GPIO_SetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text))
+<P><STRONG><a name="[92]"></a>GPIO_SetBits</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Config
 </UL>
@@ -568,7 +568,7 @@ Global Symbols
 
 <P><STRONG><a name="[11c]"></a>GPIO_ToggleBits</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, stm32f4xx_gpio.o(.text), UNUSED)
 
-<P><STRONG><a name="[8f]"></a>GPIO_PinAFConfig</STRONG> (Thumb, 70 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(.text))
+<P><STRONG><a name="[90]"></a>GPIO_PinAFConfig</STRONG> (Thumb, 70 bytes, Stack size 20 bytes, stm32f4xx_gpio.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = GPIO_PinAFConfig
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART3_Init
@@ -638,7 +638,7 @@ Global Symbols
 
 <P><STRONG><a name="[133]"></a>RCC_TIMCLKPresConfig</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
 
-<P><STRONG><a name="[8e]"></a>RCC_AHB1PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
+<P><STRONG><a name="[8f]"></a>RCC_AHB1PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART3_Init
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorSwitchInit
@@ -651,7 +651,7 @@ Global Symbols
 
 <P><STRONG><a name="[135]"></a>RCC_AHB3PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
 
-<P><STRONG><a name="[92]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
+<P><STRONG><a name="[93]"></a>RCC_APB1PeriphClockCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART3_Init
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C3_Init
@@ -670,11 +670,11 @@ Global Symbols
 
 <P><STRONG><a name="[137]"></a>RCC_AHB3PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
 
-<P><STRONG><a name="[85]"></a>RCC_APB1PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
+<P><STRONG><a name="[86]"></a>RCC_APB1PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_DeInit
 <LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_DeInit
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_DeInit
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_DeInit
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_DeInit
 </UL>
 
 <P><STRONG><a name="[c0]"></a>RCC_APB2PeriphResetCmd</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, stm32f4xx_rcc.o(.text), UNUSED)
@@ -728,35 +728,36 @@ Global Symbols
 <P><STRONG><a name="[b]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40xx.o(RESET)
 </UL>
-<P><STRONG><a name="[20]"></a>CAN1_RX0_IRQHandler</STRONG> (Thumb, 270 bytes, Stack size 48 bytes, stm32f4xx_it.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = CAN1_RX0_IRQHandler &rArr; HotfixMove &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
+<P><STRONG><a name="[20]"></a>CAN1_RX0_IRQHandler</STRONG> (Thumb, 326 bytes, Stack size 56 bytes, stm32f4xx_it.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = CAN1_RX0_IRQHandler &rArr; Move &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimers
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray8Bytes
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimers
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray8Bytes
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Receive
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40xx.o(RESET)
 </UL>
-<P><STRONG><a name="[84]"></a>CAN_DeInit</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[85]"></a>CAN_DeInit</STRONG> (Thumb, 50 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = CAN_DeInit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
+<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Config
 </UL>
 
-<P><STRONG><a name="[93]"></a>CAN_Init</STRONG> (Thumb, 276 bytes, Stack size 12 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[94]"></a>CAN_Init</STRONG> (Thumb, 276 bytes, Stack size 12 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = CAN_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Config
 </UL>
 
-<P><STRONG><a name="[94]"></a>CAN_FilterInit</STRONG> (Thumb, 258 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[95]"></a>CAN_FilterInit</STRONG> (Thumb, 258 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = CAN_FilterInit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Config
@@ -770,18 +771,18 @@ Global Symbols
 
 <P><STRONG><a name="[144]"></a>CAN_TTComModeCmd</STRONG> (Thumb, 118 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
 
-<P><STRONG><a name="[8b]"></a>CAN_Transmit</STRONG> (Thumb, 304 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[8c]"></a>CAN_Transmit</STRONG> (Thumb, 304 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = CAN_Transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendEncoderOutput
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray8Bytes
+<BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendEncoderOutput
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray8Bytes
 </UL>
 
-<P><STRONG><a name="[89]"></a>CAN_TransmitStatus</STRONG> (Thumb, 138 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[8a]"></a>CAN_TransmitStatus</STRONG> (Thumb, 138 bytes, Stack size 8 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = CAN_TransmitStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wait4TransmissionComplete
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wait4TransmissionComplete
 </UL>
 
 <P><STRONG><a name="[145]"></a>CAN_CancelTransmit</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
@@ -808,7 +809,7 @@ Global Symbols
 
 <P><STRONG><a name="[14d]"></a>CAN_GetLSBTransmitErrorCounter</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
 
-<P><STRONG><a name="[95]"></a>CAN_ITConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text))
+<P><STRONG><a name="[96]"></a>CAN_ITConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Config
 </UL>
 
@@ -816,15 +817,15 @@ Global Symbols
 
 <P><STRONG><a name="[14f]"></a>CAN_ClearFlag</STRONG> (Thumb, 52 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
 
-<P><STRONG><a name="[86]"></a>CAN_GetITStatus</STRONG> (Thumb, 308 bytes, Stack size 16 bytes, stm32f4xx_can.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CheckITStatus
+<P><STRONG><a name="[87]"></a>CAN_GetITStatus</STRONG> (Thumb, 308 bytes, Stack size 16 bytes, stm32f4xx_can.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CheckITStatus
 </UL>
 
 <P><STRONG><a name="[150]"></a>CAN_ClearITPendingBit</STRONG> (Thumb, 162 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
 
 <P><STRONG><a name="[151]"></a>NVIC_PriorityGroupConfig</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, misc.o(.text), UNUSED)
 
-<P><STRONG><a name="[96]"></a>NVIC_Init</STRONG> (Thumb, 108 bytes, Stack size 16 bytes, misc.o(.text))
+<P><STRONG><a name="[97]"></a>NVIC_Init</STRONG> (Thumb, 108 bytes, Stack size 16 bytes, misc.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = NVIC_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Config
@@ -838,72 +839,72 @@ Global Symbols
 <P><STRONG><a name="[154]"></a>SysTick_CLKSourceConfig</STRONG> (Thumb, 40 bytes, Stack size 0 bytes, misc.o(.text), UNUSED)
 
 <P><STRONG><a name="[b1]"></a>Delay</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<BR><BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
 </UL>
 
-<P><STRONG><a name="[88]"></a>Wait4TransmissionComplete</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[89]"></a>Wait4TransmissionComplete</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = Wait4TransmissionComplete &rArr; CAN_TransmitStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_TransmitStatus
+<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_TransmitStatus
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
 </UL>
 
-<P><STRONG><a name="[8a]"></a>CAN_SafeTransmit</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[8b]"></a>CAN_SafeTransmit</STRONG> (Thumb, 22 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = CAN_SafeTransmit &rArr; Wait4TransmissionComplete &rArr; CAN_TransmitStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wait4TransmissionComplete
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wait4TransmissionComplete
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArrayFragment
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendFlag
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
 </UL>
 
-<P><STRONG><a name="[8c]"></a>Convert16to2_8</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[8d]"></a>Convert16to2_8</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, phil_pwm.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArrayFragment
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendCoordinate
 </UL>
 
-<P><STRONG><a name="[7e]"></a>SendCoordinate</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[7f]"></a>SendCoordinate</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = SendCoordinate &rArr; CAN_SafeTransmit &rArr; Wait4TransmissionComplete &rArr; CAN_TransmitStatus
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Convert16to2_8
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
+<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Convert16to2_8
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[8d]"></a>SendEncoderOutput</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
+<P><STRONG><a name="[8e]"></a>SendEncoderOutput</STRONG> (Thumb, 60 bytes, Stack size 24 bytes, phil_pwm.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
 </UL>
 
-<P><STRONG><a name="[81]"></a>SendArray8Bytes</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[82]"></a>SendArray8Bytes</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SendArray8Bytes &rArr; CAN_Transmit
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Transmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[aa]"></a>ClearGlobalArrays</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[74]"></a>CAN_Config</STRONG> (Thumb, 238 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = CAN_Config &rArr; GPIO_PinAFConfig
 </UL>
-<BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_ITConfig
-<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_FilterInit
-<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Init
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_DeInit
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_ITConfig
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_FilterInit
+<LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_Init
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_DeInit
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -911,7 +912,7 @@ Global Symbols
 <P><STRONG><a name="[73]"></a>NVIC_Config</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = NVIC_Config &rArr; NVIC_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -921,58 +922,58 @@ Global Symbols
 <P><STRONG><a name="[76]"></a>TIM_Config</STRONG> (Thumb, 516 bytes, Stack size 48 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = TIM_Config &rArr; GPIO_PinAFConfig
 </UL>
-<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_TimeBaseInit
-<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectSlaveMode
-<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectOutputTrigger
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectMasterSlaveMode
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC4Init
-<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC1PreloadConfig
-<LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC1Init
-<LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ARRPreloadConfig
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<BR>[Calls]<UL><LI><a href="#[99]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_TimeBaseInit
+<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectSlaveMode
+<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectOutputTrigger
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectMasterSlaveMode
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
+<LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC4Init
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC1PreloadConfig
+<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_OC1Init
+<LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ARRPreloadConfig
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[a2]"></a>ApplyMotorSettings</STRONG> (Thumb, 74 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<P><STRONG><a name="[a3]"></a>ApplyMotorSettings</STRONG> (Thumb, 74 bytes, Stack size 0 bytes, phil_pwm.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 </UL>
 
-<P><STRONG><a name="[a1]"></a>PWM_start</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a2]"></a>PWM_start</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = PWM_start
 </UL>
-<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
-<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ApplyMotorSettings
+<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
+<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ApplyMotorSettings
 </UL>
-<BR>[Called By]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
-<P><STRONG><a name="[a3]"></a>PWM_stop</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a4]"></a>PWM_stop</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = PWM_stop
 </UL>
-<BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
+<BR>[Calls]<UL><LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStop
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
-<P><STRONG><a name="[a4]"></a>PWM_Run</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a5]"></a>PWM_Run</STRONG> (Thumb, 30 bytes, Stack size 16 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = PWM_Run &rArr; PWM_stop
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TestPulsesForOscilloscope
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
 </UL>
 
 <P><STRONG><a name="[156]"></a>SetDestinationCoordinate</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, phil_pwm.o(.text), UNUSED)
@@ -980,119 +981,119 @@ Global Symbols
 <P><STRONG><a name="[157]"></a>GetCoordinateToSet</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, phil_pwm.o(.text), UNUSED)
 
 <P><STRONG><a name="[ad]"></a>DetermDirection</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
-<P><STRONG><a name="[a6]"></a>PrevIndN</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a7]"></a>PrevIndN</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = PrevIndN
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
 </UL>
 
-<P><STRONG><a name="[a5]"></a>PrevInd</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a6]"></a>PrevInd</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = PrevInd &rArr; PrevIndN
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevIndN
+<BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevIndN
 </UL>
-<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
-<P><STRONG><a name="[a7]"></a>Check4OverStep2mm</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[a8]"></a>Check4OverStep2mm</STRONG> (Thumb, 70 bytes, Stack size 24 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = Check4OverStep2mm
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[a9]"></a>MotorStuck</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = MotorStuck &rArr; PrevIndN
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
-<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevIndN
+<BR>[Calls]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevIndN
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 </UL>
-<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[ab]"></a>UpdateTimersWidth</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
-<P><STRONG><a name="[7d]"></a>HotfixMove</STRONG> (Thumb, 616 bytes, Stack size 56 bytes, phil_pwm.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = HotfixMove &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
+<P><STRONG><a name="[7d]"></a>Move</STRONG> (Thumb, 616 bytes, Stack size 56 bytes, phil_pwm.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = Move &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
-<BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdatePID
+<BR>[Calls]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdatePID
 <LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InitPID
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimersWidth
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DetermDirection
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ClearGlobalArrays
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[b0]"></a>MotorStop</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<BR><BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;abs
 </UL>
 
-<P><STRONG><a name="[80]"></a>Reset</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[81]"></a>Reset</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = Reset &rArr; GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimersWidth
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
-<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
-<LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<LI><a href="#[a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PrevInd
+<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 <LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ClearGlobalArrays
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[83]"></a>UpdateTimers</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, phil_pwm.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
+<P><STRONG><a name="[84]"></a>UpdateTimers</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, phil_pwm.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
 <LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[82]"></a>Test</STRONG> (Thumb, 106 bytes, Stack size 24 bytes, phil_pwm.o(.text))
+<P><STRONG><a name="[83]"></a>Test</STRONG> (Thumb, 106 bytes, Stack size 24 bytes, phil_pwm.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = Test &rArr; PWM_Run &rArr; PWM_stop
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SetDirection
-<LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Delay
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimers
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdateTimers
 </UL>
 <BR>[Called By]<UL><LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[b2]"></a>TestPulsesForOscilloscope</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
+<BR><BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_Run
 </UL>
 
 <P><STRONG><a name="[b3]"></a>SendFlag</STRONG> (Thumb, 32 bytes, Stack size 16 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
+<BR><BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendTrajectory
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray
 </UL>
 
 <P><STRONG><a name="[b4]"></a>SendArrayFragment</STRONG> (Thumb, 106 bytes, Stack size 24 bytes, phil_pwm.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Convert16to2_8
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
+<BR><BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Convert16to2_8
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_SafeTransmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SendArray
 </UL>
@@ -1138,8 +1139,8 @@ Global Symbols
 <P><STRONG><a name="[77]"></a>MotorSwitchInit</STRONG> (Thumb, 90 bytes, Stack size 24 bytes, phil_rele.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = MotorSwitchInit &rArr; GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<BR>[Calls]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1149,15 +1150,15 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rDelay
 <LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
-<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
+<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
 </UL>
-<BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Test
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[bc]"></a>I2C_DeInit</STRONG> (Thumb, 82 bytes, Stack size 8 bytes, stm32f4xx_i2c.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
+<BR><BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
 </UL>
 
 <P><STRONG><a name="[bd]"></a>I2C_Init</STRONG> (Thumb, 218 bytes, Stack size 48 bytes, stm32f4xx_i2c.o(.text))
@@ -1265,7 +1266,7 @@ Global Symbols
 
 <P><STRONG><a name="[bf]"></a>USART_DeInit</STRONG> (Thumb, 206 bytes, Stack size 8 bytes, stm32f4xx_usart.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphResetCmd
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
 </UL>
 
 <P><STRONG><a name="[c1]"></a>USART_Init</STRONG> (Thumb, 204 bytes, Stack size 48 bytes, stm32f4xx_usart.o(.text), UNUSED)
@@ -1332,10 +1333,10 @@ Global Symbols
 
 <P><STRONG><a name="[c2]"></a>TIM_DeInit</STRONG> (Thumb, 346 bytes, Stack size 8 bytes, stm32f4xx_tim.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphResetCmd
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphResetCmd
 </UL>
 
-<P><STRONG><a name="[98]"></a>TIM_TimeBaseInit</STRONG> (Thumb, 104 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[99]"></a>TIM_TimeBaseInit</STRONG> (Thumb, 104 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
@@ -1357,7 +1358,7 @@ Global Symbols
 
 <P><STRONG><a name="[193]"></a>TIM_UpdateRequestConfig</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text), UNUSED)
 
-<P><STRONG><a name="[9c]"></a>TIM_ARRPreloadConfig</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9d]"></a>TIM_ARRPreloadConfig</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
@@ -1365,13 +1366,13 @@ Global Symbols
 
 <P><STRONG><a name="[195]"></a>TIM_SetClockDivision</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text), UNUSED)
 
-<P><STRONG><a name="[97]"></a>TIM_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
+<P><STRONG><a name="[98]"></a>TIM_Cmd</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_stop
+<LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PWM_start
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
-<P><STRONG><a name="[99]"></a>TIM_OC1Init</STRONG> (Thumb, 114 bytes, Stack size 16 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9a]"></a>TIM_OC1Init</STRONG> (Thumb, 114 bytes, Stack size 16 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = TIM_OC1Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
@@ -1381,7 +1382,7 @@ Global Symbols
 
 <P><STRONG><a name="[197]"></a>TIM_OC3Init</STRONG> (Thumb, 204 bytes, Stack size 16 bytes, stm32f4xx_tim.o(.text), UNUSED)
 
-<P><STRONG><a name="[9a]"></a>TIM_OC4Init</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9b]"></a>TIM_OC4Init</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = TIM_OC4Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
@@ -1407,7 +1408,7 @@ Global Symbols
 
 <P><STRONG><a name="[1a1]"></a>TIM_ForcedOC4Config</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text), UNUSED)
 
-<P><STRONG><a name="[9b]"></a>TIM_OC1PreloadConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9c]"></a>TIM_OC1PreloadConfig</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
@@ -1527,20 +1528,20 @@ Global Symbols
 
 <P><STRONG><a name="[1c9]"></a>TIM_InternalClockConfig</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text), UNUSED)
 
-<P><STRONG><a name="[9f]"></a>TIM_SelectInputTrigger</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[a0]"></a>TIM_SelectInputTrigger</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_TIxExternalClockConfig
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ITRxExternalClockConfig
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
 <P><STRONG><a name="[cd]"></a>TIM_ITRxExternalClockConfig</STRONG> (Thumb, 24 bytes, Stack size 12 bytes, stm32f4xx_tim.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
+<BR><BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
 </UL>
 
 <P><STRONG><a name="[ce]"></a>TIM_TIxExternalClockConfig</STRONG> (Thumb, 62 bytes, Stack size 24 bytes, stm32f4xx_tim.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TI1_Config
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TI2_Config
-<LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
+<LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_SelectInputTrigger
 </UL>
 
 <P><STRONG><a name="[d0]"></a>TIM_ETRConfig</STRONG> (Thumb, 28 bytes, Stack size 12 bytes, stm32f4xx_tim.o(.text), UNUSED)
@@ -1556,15 +1557,15 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_ETRConfig
 </UL>
 
-<P><STRONG><a name="[9e]"></a>TIM_SelectOutputTrigger</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9f]"></a>TIM_SelectOutputTrigger</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
-<P><STRONG><a name="[a0]"></a>TIM_SelectSlaveMode</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[a1]"></a>TIM_SelectSlaveMode</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
-<P><STRONG><a name="[9d]"></a>TIM_SelectMasterSlaveMode</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
+<P><STRONG><a name="[9e]"></a>TIM_SelectMasterSlaveMode</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, stm32f4xx_tim.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Config
 </UL>
 
@@ -1577,10 +1578,10 @@ Global Symbols
 <P><STRONG><a name="[d2]"></a>USART3_Init</STRONG> (Thumb, 116 bytes, Stack size 32 bytes, phil_i2c.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 
 <P><STRONG><a name="[d5]"></a>Usart3_Send_symbol</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, phil_i2c.o(.text), UNUSED)
@@ -1596,10 +1597,10 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Cmd
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_Init
-<LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB1PeriphClockCmd
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1641,28 +1642,29 @@ Global Symbols
 <LI><a href="#[dd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_AcknowledgeConfig
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_GenerateSTOP
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
+<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetMotorCoordinate
 <LI><a href="#[12]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI0_IRQHandler
 </UL>
 
-<P><STRONG><a name="[a8]"></a>abs</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, phil_i2c.o(.text))
+<P><STRONG><a name="[7e]"></a>abs</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, phil_i2c.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStop
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MotorStuck
-<LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Check4OverStep2mm
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
+<LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
 <P><STRONG><a name="[ec]"></a>absI</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, phil_i2c.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UpdatePID
 </UL>
 
-<P><STRONG><a name="[7f]"></a>GetMotorCoordinate</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, phil_i2c.o(.text))
+<P><STRONG><a name="[80]"></a>GetMotorCoordinate</STRONG> (Thumb, 28 bytes, Stack size 16 bytes, phil_i2c.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = GetMotorCoordinate &rArr; GetEncoderOutput &rArr; I2C_start &rArr; I2C_CheckEvent
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetEncoderOutput
 </UL>
-<BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 <LI><a href="#[20]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN1_RX0_IRQHandler
 </UL>
 
@@ -1681,10 +1683,10 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f40xx.o(RESET)
 </UL>
 <P><STRONG><a name="[e6]"></a>EXTILine0_Config</STRONG> (Thumb, 108 bytes, Stack size 24 bytes, phil_nvic.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
+<BR><BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_APB2PeriphClockCmd
-<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
-<LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHB1PeriphClockCmd
+<LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 <LI><a href="#[e8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SYSCFG_EXTILineConfig
 <LI><a href="#[e9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EXTI_Init
 </UL>
@@ -1732,7 +1734,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_d2f
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[af]"></a>UpdatePID</STRONG> (Thumb, 180 bytes, Stack size 40 bytes, phil_pid.o(.text))
@@ -1740,7 +1742,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ec]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;absI
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HotfixMove
+<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Move
 </UL>
 
 <P><STRONG><a name="[1d6]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
@@ -1819,8 +1821,8 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemInit
 </UL>
 
-<P><STRONG><a name="[87]"></a>CheckITStatus</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
-<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_GetITStatus
+<P><STRONG><a name="[88]"></a>CheckITStatus</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, stm32f4xx_can.o(.text), UNUSED)
+<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;CAN_GetITStatus
 </UL>
 
 <P><STRONG><a name="[ca]"></a>TI4_Config</STRONG> (Thumb, 80 bytes, Stack size 20 bytes, stm32f4xx_tim.o(.text), UNUSED)
