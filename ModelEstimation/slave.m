@@ -1,11 +1,11 @@
-function [coords, u, times] = slave(yamlFile, plotOpt)
+function [times, u, coords] = slave(yamlFile, plotOpt)
 %% Function for debugging LEETECH motors moving
 
 %% Load the data
 if nargin < 2
-    plotOpt =0;
+    plotOpt =1;
     if nargin < 1
-        yamlFile = 'Data.yaml';
+        yamlFile = 'Keil_Debug_data/Data.yaml';
     end
 end
 
@@ -23,9 +23,9 @@ times_inertion = times(stopInd+1:end);
 
 %% Plot the data
 if (plotOpt ~= 0)
-%     figure(1)
     close all
-    figure('units','normalized','outerposition',[0 0 1 1])
+    figure(1)
+%     figure('units','normalized','outerposition',[0 0 1 1])
     subplot(2,1,1)
     title('\bf Coordinate of motor')
     xlabel('t, ms')
@@ -58,16 +58,17 @@ end
 function [t, u, x, destination, stopIndex] = getData(yaml)
     params = ReadYaml(yaml);
 
-%     destination = to_um(params.dest);
-%     stopIndex = params.pulsesStopIndex;
-    destination = 0;
+%    destination = to_um(params.dest);
+    destination = params.dest;
+    stopIndex = params.pulsesStopIndex;
 
-    t = cell2mat(params.t) / 100;
+%     t = cell2mat(params.t) / 100;
+    t = cell2mat(params.t);
     u = cell2mat(params.u);
-    x = to_um( cell2mat(params.x) );
+    x = cell2mat(params.x);
     
-    stopIndex = length(u(u ~= 0));
-    destination = x(end);
+%     stopIndex = length(u(u ~= 0));
+%     destination = x(end);
 end
 
 function savePreviousData(yaml)

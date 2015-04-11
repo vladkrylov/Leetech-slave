@@ -12,6 +12,7 @@ void TIM_Config(void);
 
 void UpdateTimers(uint8_t motorID, uint16_t pulseWidth, uint16_t pulsePeriod);
 void UpdateTimersWidth(uint16_t pulseWidth);
+uint16_t GetTimersWidth(void);
 void ApplyMotorSettings(uint8_t motorID);
 
 void PWM_start(uint8_t motorID);

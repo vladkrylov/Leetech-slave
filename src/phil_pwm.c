@@ -24,7 +24,7 @@ static uint16_t lengthOfTrajectory = 0;
 // order: Kp, Ki, Kd
 // three coefficients per one motor
 static double PIDSettings[N_MOTORS][3] = {
-{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-04, 0.01},
 {0.02, 1.45e-05, 0.01},
 {0.02, 1.45e-05, 0.01},
 {0.02, 1.45e-05, 0.01}
@@ -432,7 +432,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t p
 			}
 			
 						
-			pulseValues[i] = PWM_PULSE;
+			pulseValues[i] = GetTimersWidth();
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
@@ -586,6 +586,15 @@ void UpdateTimersWidth(uint16_t pulseWidth)
 {
 	TIM3->CCR1 = pulseWidth;
 	TIM4->CCR4 = pulseWidth;
+}
+
+uint16_t GetTimersWidth(void)
+{
+	uint16_t w = TIM3->CCR1;
+	if (w != TIM4->CCR4) {
+		return UINT16_MAX;
+	}
+	return w;
 }
 
 // This function must be called before any movings on motor applied
