@@ -3,7 +3,7 @@ function [times, u, coords] = slave(yamlFile, plotOpt)
 
 %% Load the data
 if nargin < 2
-    plotOpt =1;
+    plotOpt = 1;
     if nargin < 1
         yamlFile = 'Keil_Debug_data/Data.yaml';
     end
@@ -11,7 +11,7 @@ end
 
 [times, u, coords, dest, stopInd] = getData(yamlFile);
 times = [times(1) times(times ~= 0)];
-len = length(times);
+len = length(coords);
 u = u(1:len);
 coords = coords(1:len);
 

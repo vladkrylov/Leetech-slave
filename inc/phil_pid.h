@@ -7,6 +7,7 @@ typedef struct
 {
 	uint16_t numOfPoints;
 	
+	int baseline;
   int dState;                  // Last position input
   int iState;                  // Integrator state
   int iMax, iMin;      

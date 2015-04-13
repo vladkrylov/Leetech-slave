@@ -23,10 +23,10 @@ static uint16_t lengthOfTrajectory = 0;
 // order: Kp, Ki, Kd
 // three coefficients per one motor
 static double PIDSettings[N_MOTORS][3] = {
-{0.02, 1.45e-05, 0.01},
-{0.02, 1.45e-05, 0.01},
-{0.02, 1.45e-05, 0.01},
-{0.02, 1.45e-05, 0.01}
+{0.2, 0, 4.2},
+{0.2, 0, 4.2},
+{0.2, 0, 4.2},
+{0.2, 0, 4.2}
 };
 SPid pid;
 
@@ -400,21 +400,22 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 	return direction;
 }
 
-uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
+uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
+	uint16_t currentPulseValue = 0;
 	direction_t direction;
 
 	uint16_t i = 1;
 	uint16_t stopInd = 0;
 	
 	ClearGlobalArrays();
-	UpdateTimersWidth(PWM_PULSE);
+	UpdateTimersWidth(currentPulseValue);
 	InitPID(&pid, PIDSettings[motorID-1][0], PIDSettings[motorID-1][1], PIDSettings[motorID-1][2]);
 
 	coordinates[0] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 	times[0] = 0;
-	pulseValues[0] = PWM_PULSE;
+	pulseValues[0] = currentPulseValue;
 
 	if (abs(coordinates[0], coordToSet) > precision) {
 		direction = DetermDirection(coordToSet, coordinates[0]);
@@ -431,20 +432,21 @@ uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint
 			}
 			
 						
-			pulseValues[i] = PWM_PULSE;
+			pulseValues[i] = currentPulseValue;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
 			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
 			if ((abs(coordinates[i], coordToSet) < precision) || 
-					(coordinates[i] > coordToSet))
+					Overshooted(coordToSet, coordinates[i], direction))
 			{
 				PWM_stop();
 				break;
 			}
 
-			UpdateTimersWidth(UpdatePID(&pid, coordinates[i], coordToSet));
+			currentPulseValue = UpdatePID(&pid, coordinates[i], coordToSet);
+			UpdateTimersWidth(currentPulseValue);
 			
 			i++; i %= sizeOfGlobalArrays;
 		}
@@ -692,7 +694,19 @@ void SendTrajectory(void)
 	SendFlag(TRAJECTORY_TRANSMITTED);
 }
 
-
+uint8_t Overshooted(uint16_t dest, uint16_t coord, direction_t direction)
+{
+	uint8_t res;
+	switch (direction) {
+		case FORWARD:
+			res = coord >= dest;
+			break;
+		case BACK:
+			res = coord <= dest;
+			break;
+	}
+	return res;
+}
 
 
 

@@ -15,6 +15,8 @@ void UpdateTimersWidth(uint16_t pulseWidth);
 uint16_t GetTimersWidth(void);
 void ApplyMotorSettings(uint8_t motorID);
 
+direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate);
+
 void PWM_start(uint8_t motorID);
 void PWM_stop(void);
 void PWM_Run(uint8_t motorID, uint32_t duration);
@@ -62,6 +64,8 @@ void SendTrajectory(void);
 void Convert16to2_8(uint16_t val, uint8_t *part1, uint8_t *part2);
 void Wait4TransmissionComplete(uint8_t TransmitMailbox);
 void CAN_SafeTransmit(CanTxMsg* TxMessage);
+
+uint8_t Overshooted(uint16_t dest, uint16_t coord, direction_t direction);
 
 #endif /* __PHIL_PWM_H */
 
