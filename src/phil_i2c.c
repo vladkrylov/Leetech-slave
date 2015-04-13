@@ -240,6 +240,15 @@ int absI(int x, int y)
 	}
 }
 
+uint16_t min(uint16_t x, uint16_t y)
+{
+	if (x < y) {
+		return x;
+	} else {
+		return y;
+	}
+}
+
 uint16_t GetMotorCoordinate(uint8_t motorID)
 {
 	uint16_t x;

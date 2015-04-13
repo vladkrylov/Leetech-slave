@@ -169,6 +169,8 @@ void CAN1_RX0_IRQHandler(void)
 	uint16_t coordinateToSet;
 	uint16_t finalCoord;
 	uint16_t coord;
+	uint16_t precision;
+	uint16_t nZeros;
 	uint8_t motorID;
 	uint8_t steps2mm;
 	uint16_t newPulseWidth;
@@ -187,20 +189,29 @@ void CAN1_RX0_IRQHandler(void)
 		
 		switch (action) {
 			case MOVE:
+				precision = 40;
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
 				coordinateToSet = coordinateToSet*4096/2000;
 				getTrajectory = RxMessage.Data[5];
 
-//				finalCoord = steps2mm * 4096 + GetMotorCoordinate(motorID);
-//				direction = DetermDirection(coordinateToSet, finalCoord);
-//				while(abs(coordinateToSet, finalCoord) > 40) {
-//					coord = finalCoord;
+				coord = UINT16_MAX;
+				finalCoord = steps2mm * 4096 + GetMotorCoordinate(motorID);
+				direction = DetermDirection(coordinateToSet, finalCoord);
+				nZeros = 0;
+				while(abs(coordinateToSet, finalCoord) > min(precision, 2*abs(finalCoord, coord))) {
+					coord = finalCoord;
 					finalCoord = Move(motorID, coordinateToSet, steps2mm, 0);
-//					steps2mm = finalCoord / 4096;
-//					
-//					if (Overshooted(coordinateToSet, finalCoord, direction))
-//						break;
-//				}
+					steps2mm = finalCoord / 4096;
+					
+					if (finalCoord == coord) {
+						nZeros++;
+					} else {
+						nZeros = 0;
+					}
+					if (nZeros >= 1) break;
+					if (Overshooted(coordinateToSet, finalCoord, direction))
+						break;
+				}
 				SendCoordinate(finalCoord, SET_OR_GET);
 			
 //				if (getTrajectory)
