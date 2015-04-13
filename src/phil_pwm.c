@@ -23,10 +23,10 @@ static uint16_t lengthOfTrajectory = 0;
 // order: Kp, Ki, Kd
 // three coefficients per one motor
 static double PIDSettings[N_MOTORS][3] = {
-{0.2, 0, 4.2},
-{0.2, 0, 4.2},
-{0.2, 0, 4.2},
-{0.2, 0, 4.2}
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01},
+{0.02, 1.45e-05, 0.01}
 };
 SPid pid;
 
@@ -403,8 +403,8 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
-	uint16_t currentPulseValue = 0;
 	direction_t direction;
+	uint16_t currentPulseValue = 0;
 
 	uint16_t i = 1;
 	uint16_t stopInd = 0;
@@ -432,19 +432,18 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t p
 			}
 			
 						
-			pulseValues[i] = currentPulseValue;
+			pulseValues[i] = PWM_PULSE;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
 			Check4OverStep2mm(coordinates[PrevInd(i)], &coordinates[i], &steps2mm);
 			
 			if ((abs(coordinates[i], coordToSet) < precision) || 
-					Overshooted(coordToSet, coordinates[i], direction))
+					(coordinates[i] > coordToSet))
 			{
 				PWM_stop();
 				break;
 			}
-
 			currentPulseValue = UpdatePID(&pid, coordinates[i], coordToSet);
 			UpdateTimersWidth(currentPulseValue);
 			

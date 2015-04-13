@@ -5,7 +5,6 @@ void InitPID(SPid* s, double Kp, double Ki, double Kd)
 {
 	s->numOfPoints = 0;
 	
-	s->baseline = 30;
 	s->iState = 0;
 	s->dState = 0;
 	
@@ -19,7 +18,7 @@ void InitPID(SPid* s, double Kp, double Ki, double Kd)
 	s->iMin = 0;
 	s->iMax = 1000000;
 	
-	s->minOutputLimit = 0;
+	s->minOutputLimit = 5;
 	s->maxOutputLimit = 120;
 }
 
@@ -33,6 +32,12 @@ uint16_t UpdatePID(SPid* pid, int coord, int destination)
 	
 	error = absI(destination, coord);
 	
+//	if ((error > 50) && ((coord - pid->dState) == 0) && (pid->numOfPoints > 20)) {
+//		pid->pKGain = 1.2 + pid->Kpk * (444 - error);
+//		if (pid->pKGain < 1.) {
+//			pid->pKGain = 1.;
+//		}
+//	}
   pTerm = (int)(pid->pGain * error);    // calculate the proportional term
 	
 	pid->iState += error;          					 		// calculate the integral state with appropriate limiting
@@ -51,7 +56,7 @@ uint16_t UpdatePID(SPid* pid, int coord, int destination)
 	}
   pid->dState = coord;
 
-	result = pid->baseline + pTerm + iTerm - dTerm;
+	result = pTerm + iTerm - dTerm;
 	// check if result is in valid range
 	if (result > pid->maxOutputLimit) {
 		result = pid->maxOutputLimit;
