@@ -9,7 +9,6 @@ const uint8_t N_MOTORS = 4;
 
 static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
 static uint16_t PWM_PERIOD = 260;
-static uint16_t PWM_PULSE_MAX = 120;
 static uint16_t PWM_PULSE = 120;
 
 static uint16_t coordinateToSet = 0;
@@ -24,7 +23,7 @@ static uint16_t lengthOfTrajectory = 0;
 // order: Kp, Ki, Kd
 // three coefficients per one motor
 static double PIDSettings[N_MOTORS][3] = {
-{0.02, 1.45e-04, 0.01},
+{0.02, 1.45e-05, 0.01},
 {0.02, 1.45e-05, 0.01},
 {0.02, 1.45e-05, 0.01},
 {0.02, 1.45e-05, 0.01}
@@ -401,7 +400,7 @@ direction_t DetermDirection(uint16_t coordToSet, uint16_t coordinate)
 	return direction;
 }
 
-uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
+uint16_t HotfixMove(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t precision)
 {
 	uint16_t coord;
 	direction_t direction;
@@ -432,7 +431,7 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t p
 			}
 			
 						
-			pulseValues[i] = GetTimersWidth();
+			pulseValues[i] = PWM_PULSE;
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
 			
@@ -452,7 +451,6 @@ uint16_t Move(uint8_t motorID, uint16_t coordToSet, uint8_t steps2mm, uint16_t p
 
 		stopInd = i;
 		
-		// wait for inertion
 		while(1) {
 			coordinates[i] = steps2mm * 4096 + GetMotorCoordinate(motorID);
 			times[i] = TIM5->CNT;
@@ -586,15 +584,6 @@ void UpdateTimersWidth(uint16_t pulseWidth)
 {
 	TIM3->CCR1 = pulseWidth;
 	TIM4->CCR4 = pulseWidth;
-}
-
-uint16_t GetTimersWidth(void)
-{
-	uint16_t w = TIM3->CCR1;
-	if (w != TIM4->CCR4) {
-		return UINT16_MAX;
-	}
-	return w;
 }
 
 // This function must be called before any movings on motor applied

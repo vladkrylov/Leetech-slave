@@ -167,7 +167,6 @@ void CAN1_RX0_IRQHandler(void)
 	commands_t action;
 	uint16_t coordinateToSet;
 	uint16_t finalCoord;
-	uint16_t precision;
 	uint8_t motorID;
 	uint8_t steps2mm;
 	uint16_t newPulseWidth;
@@ -186,20 +185,14 @@ void CAN1_RX0_IRQHandler(void)
 		
 		switch (action) {
 			case MOVE:
-				precision = 0;
 				coordinateToSet = RxMessage.Data[0] + (RxMessage.Data[1]<<8);
-				coordinateToSet = coordinateToSet*4096/2000;
 				getTrajectory = RxMessage.Data[5];
 			
-				finalCoord = 0;
-//				while (abs(finalCoord, coordinateToSet) > precision) {
-					finalCoord = Move(motorID, coordinateToSet, steps2mm, precision);
-//					steps2mm = finalCoord / 4096;
-//				}
+				finalCoord = HotfixMove(motorID, coordinateToSet*4096/2000, steps2mm, 0);
 				SendCoordinate(finalCoord, SET_OR_GET);
 			
-				if (getTrajectory)
-					SendTrajectory();
+//				if (getTrajectory)
+//					SendTrajectory();
 				
 				break;
 			
