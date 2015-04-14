@@ -7,7 +7,7 @@
 
 const uint8_t N_MOTORS = 4;
 
-static uint16_t PWM_PERIODS[N_MOTORS] = {260, 248, 251, 251};
+static uint16_t PWM_PERIODS[N_MOTORS] = {256, 262, 251, 251};
 static uint16_t PWM_PERIOD = 260;
 static uint16_t PWM_PULSE = 120;
 
@@ -66,11 +66,9 @@ void SendEncoderOutput(uint8_t* data, uint8_t steps2mm, uint8_t length)
 	}
 	
 	for (i=0; i<message_length; i++) {
-//		Phil_TxMessage.Data[i] = i;
 		TxMessage.Data[i] = data[i];
 	}
 	TxMessage.Data[5] = steps2mm;
-//	Phil_TxMessage.Data[0] = '0';
 	CAN_Transmit(CANx, &TxMessage);
 }
 
@@ -78,10 +76,8 @@ void SendArray8Bytes(uint8_t* data)
 {
 	uint8_t message_length = 8;
 	uint8_t i;
-//	uint8_t arrayForDebug[8];
 	
 	for (i=0; i<message_length; i++) {
-//		arrayForDebug[i] = data[i];
 		TxMessage.Data[i] = data[i];
 	}
 	CAN_Transmit(CANx, &TxMessage);
